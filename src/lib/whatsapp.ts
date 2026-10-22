@@ -4,7 +4,7 @@ export interface WhatsAppOrder {
   storeName: string; orderNumber: string;
   items: { name: string; size?: string | null; color?: string | null; quantity: number; unitPriceCents: number }[];
   subtotalCents: number; discountCents: number; shippingCents: number | null; totalCents: number;
-  customerName?: string | null; couponCode?: string | null; notes?: string | null;
+  customerName?: string | null; couponCode?: string | null; notes?: string | null; receiptUrl?: string | null;
 }
 
 /** Só inclui o que foi informado/calculado; nunca afirma pagamento. */
@@ -24,6 +24,7 @@ export function buildOrderMessage(o: WhatsAppOrder): string {
   out.push(`Total estimado: ${formatBRL(o.totalCents)}${o.shippingCents == null ? " (sem frete)" : ""}`);
   if (o.customerName) out.push(`Nome: ${o.customerName}`);
   if (o.notes) out.push(`Observações: ${o.notes}`);
+  if (o.receiptUrl) out.push(`Recibo do pedido (link privado): ${o.receiptUrl}`);
   out.push("Gostaria de confirmar a disponibilidade, o frete e as condições de pagamento.");
   return out.join("\n");
 }

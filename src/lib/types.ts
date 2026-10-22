@@ -37,7 +37,7 @@ export interface StoreSettings {
   contact_email: string | null; address: string | null; instagram_url: string | null; facebook_url: string | null;
   tiktok_url: string | null; youtube_url: string | null; promo_bar_enabled: boolean; promo_bar_text: string | null;
   promo_bar_link: string | null; free_shipping_threshold_cents: number | null; delivery_info: string | null;
-  returns_text: string | null; privacy_text: string | null; terms_text: string | null;
+  returns_text: string | null; management_text: string | null; privacy_text: string | null; terms_text: string | null;
   hero_title: string; hero_subtitle: string; hero_cta_label: string; hero_cta_link: string;
   hero_secondary_label: string; hero_secondary_link: string; hero_image_url: string | null;
   hero_image_mobile_url: string | null; featured_title: string; benefits: Benefit[]; editorial: EditorialBlock[];

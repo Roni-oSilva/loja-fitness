@@ -111,3 +111,40 @@ describe("validação no servidor", () => {
     expect(settingsSchema.safeParse({ ...s, promo_bar_enabled: "on" }).success).toBe(false); // ativa sem texto
   });
 });
+
+import { detectImageType } from "@/lib/image-sniff";
+describe("upload de imagens", () => {
+  const pad = (a: number[]) => new Uint8Array([...a, ...new Array(16).fill(0)]);
+  it("identifica pelo conteúdo e recusa SVG/scripts/extensão enganosa", () => {
+    expect(detectImageType(pad([0xff, 0xd8, 0xff, 0xe0]))?.ext).toBe("jpg");
+    expect(detectImageType(pad([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))?.ext).toBe("png");
+    expect(detectImageType(new TextEncoder().encode("RIFF\0\0\0\0WEBPVP8 xxxx"))?.ext).toBe("webp");
+    expect(detectImageType(new TextEncoder().encode("\0\0\0\x1cftypavif\0\0\0\0avifmif1"))?.ext).toBe("avif");
+    expect(detectImageType(new TextEncoder().encode('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>'))).toBeNull();
+    expect(detectImageType(new TextEncoder().encode("<?php system($_GET['x']); ?>......"))).toBeNull();
+    expect(detectImageType(new Uint8Array(4))).toBeNull();
+  });
+});
+
+import { code39 } from "@/lib/barcode";
+describe("código de barras do recibo (Code 39)", () => {
+  it("gera barras válidas para o número do pedido", () => {
+    const r = code39("LF-AB12CD34");
+    expect(r).not.toBeNull();
+    // 11 caracteres + 2 delimitadores; cada um = 6 módulos estreitos + 3 largos (3x) = 15; mais 12 espaços entre caracteres
+    expect(r!.width).toBe(13 * 15 + 12);
+    expect(r!.bars).toHaveLength(13 * 5);
+  });
+  it("recusa caracteres não suportados", () => {
+    expect(code39("LF_áé")).toBeNull();
+    expect(code39("")).toBeNull();
+    expect(code39("A*B")).toBeNull();
+  });
+});
+
+describe("mensagem do WhatsApp com recibo", () => {
+  it("inclui o link privado do recibo quando informado", () => {
+    const m = buildOrderMessage({ storeName: "Loja", orderNumber: "LF-1", items: [{ name: "X", quantity: 1, unitPriceCents: 100 }], subtotalCents: 100, discountCents: 0, shippingCents: null, totalCents: 100, receiptUrl: "https://loja.com/pedido/abc?t=tok" });
+    expect(m).toContain("Recibo do pedido (link privado): https://loja.com/pedido/abc?t=tok");
+  });
+});

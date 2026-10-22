@@ -192,3 +192,52 @@ describe("Dashboard", () => {
     });
   });
 });
+
+describe("admin_save_product", () => {
+  const payload = (over: Record<string, unknown> = {}) => ({
+    name: "Legging Teste", slug: "legging-teste", base_price_cents: 15000, status: "published", is_featured: true,
+    images: [{ url: "/demo/legging.svg", alt: "Legging" }],
+    variants: [{ size: "P", color: "Preto", initial_stock: 7, is_active: true }, { size: "M", color: "Preto", is_active: true }],
+    ...over,
+  });
+  const save = (uid: string, p: object) => as(db, "authenticated", uid, async () => (await db.query<{ admin_save_product: string }>("select public.admin_save_product($1::jsonb)", [JSON.stringify(p)])).rows[0]!.admin_save_product);
+
+  it("cria produto completo atomicamente, com estoque inicial como movimentação", async () => {
+    const id = await save(MANAGER, payload());
+    const vs = (await db.query<any>("select size, stock_quantity from public.product_variants where product_id = $1 order by size", [id])).rows;
+    expect(vs).toEqual([{ size: "M", stock_quantity: 0 }, { size: "P", stock_quantity: 7 }]);
+    expect((await db.query<any>("select count(*)::int c from public.inventory_movements where reason = 'Estoque inicial'")).rows[0].c).toBe(1);
+    expect((await db.query<any>("select count(*)::int c from public.product_images where product_id = $1", [id])).rows[0].c).toBe(1);
+  });
+  it("editor salva produto mas não cria estoque; slug duplicado reverte tudo", async () => {
+    const id = await save(EDITOR, payload({ name: "Short Teste", slug: "short-teste", variants: [{ size: "G", color: null, initial_stock: 50 }] }));
+    expect((await db.query<any>("select stock_quantity from public.product_variants where product_id = $1", [id])).rows[0].stock_quantity).toBe(0);
+    await expect(save(EDITOR, payload({ slug: "short-teste", name: "Outro" }))).rejects.toThrow(/unique|duplicate/i);
+    expect((await db.query<any>("select count(*)::int c from public.products where name = 'Outro'")).rows[0].c).toBe(0);
+  });
+  it("edição desativa variantes removidas sem apagar histórico e valida regras", async () => {
+    const id = await save(ADMIN, payload({ name: "Top Teste", slug: "top-teste" }));
+    const vs = (await db.query<any>("select id, size from public.product_variants where product_id = $1 order by size", [id])).rows;
+    await save(ADMIN, payload({ id, name: "Top Teste", slug: "top-teste", variants: [{ id: vs[0].id, size: "M", color: "Preto", is_active: true }] }));
+    const after = (await db.query<any>("select size, is_active from public.product_variants where product_id = $1 order by size", [id])).rows;
+    expect(after).toEqual([{ size: "M", is_active: true }, { size: "P", is_active: false }]);
+    await expect(save(ADMIN, payload({ id, variants: [] }))).rejects.toThrow(/NO_VARIANTS/);
+    await expect(save(ADMIN, payload({ slug: "preco-invalido", sale_price_cents: 20000 }))).rejects.toThrow();
+    await expect(save(NOBODY, payload({ slug: "x-nobody" }))).rejects.toThrow(/FORBIDDEN/);
+  });
+});
+
+describe("seed de demonstração", () => {
+  it("executa em banco limpo, é idempotente e respeita as travas de estoque", async () => {
+    const seed = (await import("node:fs")).readFileSync(new URL("../../supabase/seed.sql", import.meta.url), "utf8");
+    const fresh = await createDb();
+    await fresh.exec(seed); await fresh.exec(seed);
+    const prods = (await fresh.query<any>("select count(*)::int c, bool_and(is_demo) d from public.products")).rows[0];
+    expect(prods).toEqual({ c: 8, d: true });
+    const bad = (await fresh.query<any>(`select count(*)::int c from public.product_variants v
+      where v.stock_quantity <> coalesce((select sum(quantity_delta) from public.inventory_movements m where m.variant_id = v.id), 0)`)).rows[0];
+    expect(bad.c).toBe(0); // estoque sempre = soma das movimentações
+    expect((await fresh.query<any>("select count(*)::int c from public.banners")).rows[0].c).toBe(1);
+    expect((await fresh.query<any>("select whatsapp_number from public.store_settings")).rows[0].whatsapp_number).toBeNull();
+  });
+});
