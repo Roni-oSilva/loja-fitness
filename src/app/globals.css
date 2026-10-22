@@ -1,0 +1,55 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/barlow-condensed/600.css";
+@import "@fontsource/barlow-condensed/700.css";
+@import "@fontsource/barlow-condensed/800.css";
+
+/* Tokens de tema: sobrescritos em runtime pelas configurações da loja (layout). */
+:root {
+  --brand: #ff5a1f;
+  --accent: #b8f531;
+  --ink: #111318;
+  --graphite: #282b32;
+  --mist: #f3f4f6;
+}
+
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-strong: color-mix(in srgb, var(--brand) 70%, black);
+  --color-accent: var(--accent);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-mist: var(--mist);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --breakpoint-xs: 26rem;
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-sans); color: var(--ink); background: #fff; overflow-x: clip; }
+h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: 0.01em; }
+
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; border-radius: 4px; }
+.on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--accent); box-shadow: 0 0 0 5px var(--ink); }
+
+@layer components {
+  .btn { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-6 py-3 font-display text-lg font-bold uppercase tracking-wide transition active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply bg-brand text-ink hover:brightness-95; }
+  .btn-dark { @apply bg-ink text-white hover:bg-graphite; }
+  .btn-outline { @apply border-2 border-ink bg-white text-ink hover:bg-ink hover:text-white; }
+  .btn-sm { @apply min-h-10 px-4 py-2 text-base; }
+  .field { @apply min-h-12 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-ink placeholder:text-neutral-500 focus:border-ink; }
+  .label { @apply mb-1 block text-sm font-semibold text-graphite; }
+  .container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .card { @apply rounded-xl border border-neutral-200 bg-white; }
+  .eyebrow { @apply font-display text-sm font-bold uppercase tracking-[0.2em] text-brand-strong; }
+  .h-section { @apply font-display text-3xl font-extrabold uppercase leading-none sm:text-5xl; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise 0.5s ease-out both; }
+@keyframes pulse-bg { 50% { opacity: 0.5; } }
+.skeleton { background: #e5e7eb; border-radius: 0.5rem; animation: pulse-bg 1.4s ease-in-out infinite; }
