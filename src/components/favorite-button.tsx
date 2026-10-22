@@ -10,7 +10,7 @@ export function FavoriteButton({ productId, name, className }: { productId: stri
     <button type="button" onClick={() => toggleFavorite(productId)} aria-pressed={on}
       aria-label={on ? `Remover ${name} dos favoritos` : `Adicionar ${name} aos favoritos`}
       className={cn("grid size-11 place-items-center rounded-full bg-white/95 text-ink shadow transition hover:scale-105", className)}>
-      <Heart className={cn("size-5", on && "fill-brand text-brand")} aria-hidden />
+      <Heart key={String(on)} className={cn("size-5", on && "pop fill-brand text-brand")} aria-hidden />
     </button>
   );
 }

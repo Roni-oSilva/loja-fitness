@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Heart, MessageCircle, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { SafeImage } from "./safe-image";
 import { BrandMark } from "./brand-mark";
+import { Pointer, TiltCard } from "./animated";
 import type { BannerRow } from "@/lib/services/catalog";
 import type { Category, StoreSettings } from "@/lib/types";
 
@@ -11,7 +12,7 @@ export function Hero({ s }: { s: StoreSettings }) {
   const desktop = s.hero_image_url, mobile = s.hero_image_mobile_url ?? desktop;
   return (
     <section className="px-2 pt-3 sm:px-4" aria-labelledby="hero-title">
-      <div className="on-dark relative isolate mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-ink text-white sm:rounded-[3rem]">
+      <Pointer className="on-dark relative isolate mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-ink text-white sm:rounded-[3rem]">
         {/* formas animadas */}
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
           <div className="float absolute -right-24 -top-24 size-80 rounded-full bg-brand/30 blur-3xl sm:size-[34rem]" />
@@ -25,23 +26,25 @@ export function Hero({ s }: { s: StoreSettings }) {
         <div className="grid items-center gap-10 px-6 py-14 sm:px-12 sm:py-20 lg:grid-cols-[1.25fr_1fr] lg:py-24">
           <div>
             <p className="eyebrow rise"><Sparkles className="size-3.5" aria-hidden />{s.store_name}</p>
-            <h1 id="hero-title" style={delay(1)} className="rise mt-5 max-w-3xl font-display text-[2.9rem] font-extrabold uppercase leading-[0.95] tracking-tight sm:text-7xl lg:text-[5.5rem]">{s.hero_title}</h1>
+            <h1 id="hero-title" style={delay(1)} className="mt-5 max-w-3xl font-display text-[2.9rem] font-extrabold uppercase leading-[0.95] tracking-tight sm:text-7xl lg:text-[5.5rem]" aria-label={s.hero_title}>
+              {s.hero_title.split(" ").map((w, i, a) => <span key={i} aria-hidden className={`word ${i === a.length - 1 ? "text-shimmer" : ""}`} style={{ "--w": i } as React.CSSProperties}>{w}{i < a.length - 1 ? "\u00a0" : ""}</span>)}
+            </h1>
             <p style={delay(2)} className="rise mt-6 max-w-xl text-base text-white/80 sm:text-lg">{s.hero_subtitle}</p>
             <div style={delay(3)} className="rise mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href={s.hero_cta_link} className="btn btn-primary !min-h-14 !px-9 !text-lg">{s.hero_cta_label}<ArrowRight className="size-5" aria-hidden /></Link>
+              <Link href={s.hero_cta_link} className="btn btn-primary pulse-ring !min-h-14 !px-9 !text-lg">{s.hero_cta_label}<ArrowRight className="size-5" aria-hidden /></Link>
               <Link href={s.hero_secondary_link} className="btn !min-h-14 border-2 border-white/40 !px-9 text-white hover:bg-white hover:text-ink">{s.hero_secondary_label}</Link>
             </div>
           </div>
           {/* cartão de marca flutuante */}
           <div aria-hidden className="rise relative hidden justify-self-center lg:block" style={delay(2)}>
-            <div className="float relative grid size-72 place-items-center rounded-[3rem] bg-white/5 ring-1 ring-white/15 backdrop-blur">
+            <TiltCard className="float relative grid size-72 place-items-center rounded-[3rem] bg-white/5 ring-1 ring-white/15 backdrop-blur">
               <BrandMark className="size-44" spin />
               <span className="absolute -left-6 top-10 rounded-full bg-brand px-4 py-2 font-display text-sm font-bold text-ink shadow-lg">Treino ✦ Rotina</span>
               <span className="float-slow absolute -right-6 bottom-12 rounded-full bg-white px-4 py-2 font-display text-sm font-bold text-ink shadow-lg">Compra pelo WhatsApp</span>
-            </div>
+            </TiltCard>
           </div>
         </div>
-      </div>
+      </Pointer>
     </section>
   );
 }

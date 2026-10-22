@@ -5,6 +5,7 @@ import { getOrderForAccess } from "@/lib/services/orders";
 import { ORDER_STATUS_LABEL } from "@/lib/order-status";
 import { Receipt } from "@/components/receipt";
 import { PrintButton } from "@/features/orders/print-button";
+import { Confetti } from "@/components/animated";
 import { OpenWhatsApp } from "@/features/orders/open-whatsapp";
 import { rateLimit } from "@/lib/rate-limit";
 import { headers } from "next/headers";
@@ -21,6 +22,7 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
   if (!o) notFound();
   return (
     <div className="container-x max-w-3xl py-10 sm:py-14">
+      {abrir === "1" && <Confetti />}
       <p className="flex items-center gap-2 text-sm font-bold text-green-800"><CheckCircle2 className="size-5" aria-hidden />Pedido registrado</p>
       <h1 className="h-section mt-2">Pedido {o.orderNumber}</h1>
       <p className="mt-2 text-neutral-700">Situação: <strong>{ORDER_STATUS_LABEL[o.status]}</strong>. Seu pedido <strong>ainda não está pago nem confirmado</strong>: ele só segue após conversarmos pelo WhatsApp para confirmar disponibilidade, frete e pagamento.</p>

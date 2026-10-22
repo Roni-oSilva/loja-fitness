@@ -92,3 +92,42 @@ h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0
   .print-area { position: absolute; inset: 0 auto auto 0; width: 100%; box-shadow: none !important; }
   @page { margin: 8mm; }
 }
+
+/* ===== Mais movimento ===== */
+@keyframes page-in { from { opacity: 0; transform: translateY(14px) scale(.995); } to { opacity: 1; transform: none; } }
+.page-in { animation: page-in .55s cubic-bezier(.2,.7,.2,1) both; }
+
+@keyframes progress { to { transform: scaleX(1); } }
+.scroll-progress { position: fixed; inset: 0 0 auto 0; z-index: 70; height: 4px; background: var(--brand); transform: scaleX(0); transform-origin: 0 50%; pointer-events: none; }
+@supports (animation-timeline: scroll()) { .scroll-progress { animation: progress linear both; animation-timeline: scroll(root); } }
+
+@keyframes shine-sweep { to { transform: translateX(260%) skewX(-20deg); } }
+.btn-primary { position: relative; overflow: hidden; isolation: isolate; }
+.btn-primary::after { content: ""; position: absolute; inset: 0 auto 0 -60%; width: 40%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent); transform: translateX(0) skewX(-20deg); z-index: -1; }
+.btn-primary:hover::after { animation: shine-sweep .8s ease; }
+
+@keyframes ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 60%, transparent); } 100% { box-shadow: 0 0 0 22px transparent; } }
+.pulse-ring { animation: ring 2.2s ease-out infinite; }
+
+@keyframes pop { 0% { transform: scale(.4); } 55% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.pop { animation: pop .45s cubic-bezier(.3,1.6,.5,1) both; }
+
+@keyframes word-in { from { opacity: 0; transform: translateY(.6em) rotate(3deg); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+.word { display: inline-block; animation: word-in .8s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--w, 0) * 90ms + 150ms); }
+
+@keyframes gradient-x { to { background-position: 200% 50%; } }
+.text-shimmer { background: linear-gradient(90deg, var(--brand), var(--accent), #fff, var(--accent), var(--brand)); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradient-x 6s linear infinite; }
+
+.hero-glow { background-image: radial-gradient(520px circle at var(--mx, 70%) var(--my, 20%), color-mix(in srgb, var(--brand) 28%, transparent), transparent 60%); }
+.tilt { transition: transform .15s ease-out; transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); will-change: transform; }
+
+@keyframes print-out { from { clip-path: inset(0 0 100% 0); transform: translateY(-24px); } to { clip-path: inset(0 0 0 0); transform: none; } }
+.print-out { animation: print-out 1.8s cubic-bezier(.4,0,.2,1) both; }
+
+@keyframes confetti { 0% { transform: translate3d(0,-10vh,0) rotate(0); opacity: 1; } 100% { transform: translate3d(var(--dx), 105vh, 0) rotate(var(--rot)); opacity: .9; } }
+.confetti { position: fixed; top: 0; z-index: 80; width: 10px; height: 16px; border-radius: 3px; pointer-events: none; animation: confetti var(--dur, 3.2s) cubic-bezier(.3,.6,.4,1) forwards; animation-delay: var(--delay, 0s); }
+
+.marquee-track.reverse { animation-direction: reverse; animation-duration: 40s; }
+.nav-link { position: relative; }
+.nav-link::after { content: ""; position: absolute; left: 1rem; right: 1rem; bottom: .35rem; height: 2px; background: var(--brand); transform: scaleX(0); transform-origin: left; transition: transform .3s; }
+.nav-link:hover::after { transform: scaleX(1); }

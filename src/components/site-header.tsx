@@ -35,7 +35,7 @@ export function SiteHeader({ storeName, categories, whatsappLink }: Props) {
         <div className="flex items-center gap-5">
           <button type="button" className={`${icon} lg:hidden`} aria-label="Abrir menu" aria-expanded={open} aria-controls="menu-mobile" onClick={() => setOpen(true)}><Menu className="size-6" aria-hidden /></button>
           <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
-            {nav.map((n) => <Link key={n.href} href={n.href} className="rounded-full px-4 py-2 text-sm font-semibold transition hover:bg-white/10">{n.label}</Link>)}
+            {nav.map((n) => <Link key={n.href} href={n.href} className="nav-link rounded-full px-4 py-2 text-sm font-semibold transition hover:bg-white/10">{n.label}</Link>)}
           </nav>
         </div>
 
@@ -49,7 +49,7 @@ export function SiteHeader({ storeName, categories, whatsappLink }: Props) {
           <Link href="/favoritos" className={`${icon} hidden sm:grid`} aria-label={`Favoritos${hydrated && favs.length ? ` (${favs.length})` : ""}`}><Heart className="size-5" aria-hidden /></Link>
           <Link href="/carrinho" className={`${icon} bg-brand !text-ink hover:!bg-accent`} aria-label={`Carrinho${hydrated ? `, ${count} ${count === 1 ? "item" : "itens"}` : ""}`}>
             <ShoppingBag className="size-5" aria-hidden />
-            {hydrated && count > 0 && <span className="absolute -right-1 -top-1 grid min-w-5 place-items-center rounded-full bg-white px-1 text-xs font-extrabold text-ink ring-2 ring-ink">{count}</span>}
+            {hydrated && count > 0 && <span key={count} className="pop absolute -right-1 -top-1 grid min-w-5 place-items-center rounded-full bg-white px-1 text-xs font-extrabold text-ink ring-2 ring-ink">{count}</span>}
           </Link>
           {whatsappLink && <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-sm ml-2 hidden bg-white text-ink xl:inline-flex"><MessageCircle className="size-4" aria-hidden />WhatsApp</a>}
         </div>

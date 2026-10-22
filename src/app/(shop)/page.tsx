@@ -25,6 +25,7 @@ export default async function HomePage() {
       <Editorial blocks={s.editorial} />
       <Reviews reviews={reviews} />
       <SocialGallery s={s} />
+      <div className="mt-16 sm:mt-24"><Marquee text={s.store_name} reverse /></div>
     </>
   );
 }

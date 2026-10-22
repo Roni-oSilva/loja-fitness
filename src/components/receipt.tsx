@@ -19,7 +19,7 @@ export function Receipt({ d }: { d: ReceiptData }) {
   const qtd = d.items.reduce((s, i) => s + i.quantity, 0);
   return (
     <div className="mx-auto w-full max-w-sm">
-      <article className="receipt print-area px-6 pb-8 pt-8 text-[15px] leading-snug" aria-label={`Recibo do pedido ${d.orderNumber}`}>
+      <article className="receipt print-area print-out px-6 pb-8 pt-8 text-[15px] leading-snug" aria-label={`Recibo do pedido ${d.orderNumber}`}>
         <h2 className="text-center text-3xl font-bold uppercase tracking-wide" style={{ fontFamily: "var(--font-sans)", fontWeight: 800 }}>RECIBO</h2>
         <p className="mt-1 text-center uppercase">{d.storeName}</p>
         <div className="mt-6 uppercase">

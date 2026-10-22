@@ -26,6 +26,7 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
   const theme = { "--brand": s.theme_primary, "--accent": s.theme_accent, "--ink": s.theme_dark } as CSSProperties;
   return (
     <div style={theme} className="flex min-h-dvh flex-col">
+      <div className="scroll-progress" aria-hidden />
       <PromoBar s={s} />
       <SiteHeader storeName={s.store_name} logoUrl={s.logo_url} categories={categories.map((c) => ({ name: c.name, slug: c.slug }))} whatsappLink={wa} />
       <main id="conteudo" className="flex-1">{children}</main>

@@ -141,7 +141,7 @@ function header() {
   return `${promoBar()}<header class="hdr dark"><div class="in">
     <div class="hl"><button class="ic burger" data-a="menu" aria-label="Abrir menu">☰</button><nav aria-label="Principal"><a href="#/produtos">Produtos</a><a href="#/produtos" data-a="cat" data-c="tenis-esportivos">Tênis</a><a href="#/produtos" data-a="cat" data-c="leggings-e-shorts">Leggings</a></nav></div>
     <a class="brand" href="#/" aria-label="${esc(S.settings.name)} — início">${mark("", 34)}<span>${esc(S.settings.name)}</span></a>
-    <div class="hr"><button class="ic" data-a="search" aria-label="Buscar">⌕</button><a class="ic" href="#/favoritos" aria-label="Favoritos" style="text-decoration:none">♡</a><a class="ic cart" href="#/carrinho" aria-label="Carrinho, ${count} itens" style="text-decoration:none">🛍${count ? `<span class="badge">${count}</span>` : ""}</a></div>
+    <div class="hr"><button class="ic" data-a="search" aria-label="Buscar">⌕</button><a class="ic" href="#/favoritos" aria-label="Favoritos" style="text-decoration:none">♡</a><a class="ic cart" href="#/carrinho" aria-label="Carrinho, ${count} itens" style="text-decoration:none">🛍${count ? `<span class="badge pop" key="${count}">${count}</span>` : ""}</a></div>
   </div></header>`;
 }
 function footer() {
@@ -176,12 +176,12 @@ function home() {
   const cats = CATS.map(([s, n]) => [s, n, pub.filter((p) => p.cat === s).length]).filter((c) => c[2]);
   const ban = S.banners.find((b) => b.active);
   return `${header()}
-  <section class="hero dark" aria-labelledby="ht"><div class="box">
+  <section class="hero dark" aria-labelledby="ht"><div class="box glow" id="herobox">
     <div class="blob float" style="right:-90px;top:-90px;width:420px;height:420px;background:rgba(165,201,16,.3)"></div><div class="blob" style="left:25%;bottom:-120px;width:300px;height:300px;background:rgba(228,245,138,.18)"></div>
-    <div><span class="eyebrow rise" style="color:var(--ink)">✦ ${esc(S.settings.name)}</span><h1 id="ht" class="rise" style="--i:1">Seu próximo nível começa aqui.</h1>
+    <div><span class="eyebrow rise" style="color:var(--ink)">✦ ${esc(S.settings.name)}</span><h1 id="ht" aria-label="Seu próximo nível começa aqui.">${"Seu próximo nível começa aqui.".split(" ").map((w, i, arr) => `<span class="word ${i === arr.length - 1 ? "shimmer" : ""}" aria-hidden="true" style="--w:${i}">${w}${i < arr.length - 1 ? "&nbsp;" : ""}</span>`).join("")}</h1>
     <p class="sub rise" style="--i:2">Roupas, acessórios e equipamentos para acompanhar cada treino, superar limites e transformar sua rotina.</p>
-    <div class="cta rise" style="--i:3"><a class="btn p lg" href="#/produtos">COMPRAR AGORA →</a><a class="btn g lg" href="#/produtos" data-a="sort" data-s="novidades">EXPLORAR COLEÇÃO</a></div></div>
-    <div class="brandcard float" aria-hidden="true">${mark("spin", 170)}<span class="chip" style="left:-24px;top:36px;background:var(--brand);color:var(--ink)">Treino ✦ Rotina</span><span class="chip" style="right:-24px;bottom:44px;background:#fff;color:var(--ink)">Compra pelo WhatsApp</span></div>
+    <div class="cta rise" style="--i:3"><a class="btn p lg ring" href="#/produtos">COMPRAR AGORA →</a><a class="btn g lg" href="#/produtos" data-a="sort" data-s="novidades">EXPLORAR COLEÇÃO</a></div></div>
+    <div class="brandcard float tilt" id="tiltcard" aria-hidden="true">${mark("spin", 170)}<span class="chip" style="left:-24px;top:36px;background:var(--brand);color:var(--ink)">Treino ✦ Rotina</span><span class="chip" style="right:-24px;bottom:44px;background:#fff;color:var(--ink)">Compra pelo WhatsApp</span></div>
   </div></section>
   <div class="marq dark" aria-hidden="true"><div class="t">${[0, 1].map(() => `<span class="i">${Array.from({ length: 6 }, (_, i) => `<span style="${i % 2 ? "color:var(--brand)" : "-webkit-text-stroke:2px #fff;color:transparent"}">${esc(S.settings.name)}</span>${mark("", 52)}`).join("")}</span>`).join("")}</div></div>
   <section class="s wrap"><div class="sh rv"><div><span class="eyebrow">Navegue</span><h2 class="h2">Escolha seu treino</h2></div><a class="btn o s" href="#/produtos" style="display:inline-flex">Ver todos →</a></div>
@@ -191,6 +191,7 @@ function home() {
   ${ban ? `<section class="s wrap rv"><div class="banner"><div style="position:absolute;right:-30px;top:-30px;opacity:.25;z-index:-1" class="float">${mark("", 300)}</div><div style="max-width:560px"><h2 class="h2">${esc(ban.title)}</h2><p style="font-size:18px;margin:14px 0 0">${esc(ban.sub)}</p>${ban.btn ? `<a class="btn k lg" href="#/produtos" style="margin-top:26px">${esc(ban.btn)} →</a>` : ""}</div></div></section>` : ""}
   <section class="s"><div class="bubble"><div class="bgrid">${[["✔", "Compra simples", "Escolha os produtos e finalize em poucos toques."], ["✆", "Atendimento pelo WhatsApp", "Confirmamos disponibilidade, frete e pagamento com você."], ["♡", "Trocas e devoluções", "Consulte a política da loja antes de comprar."], ["✦", "Transparência", "Valores conferidos pelo sistema no pedido."]].map((b, i) => `<div class="rv lift" style="--i:${i}"><span class="ico">${b[0]}</span><h3 style="font-size:20px;margin-top:18px">${b[1]}</h3><p class="small muted" style="margin:6px 0 0">${b[2]}</p></div>`).join("")}</div></div></section>
   <section class="s wrap edit2">${[["VISTA SUA EVOLUÇÃO.", "Peças pensadas para acompanhar o seu treino.", "background:var(--ink);color:#fff"], ["EQUIPAMENTO CERTO. FOCO TOTAL.", "Acessórios e equipamentos para a sua rotina.", "background:var(--brand);color:var(--ink)"]].map((b, i) => `<a href="#/produtos" class="eb lift rv dark" style="${b[2]};text-decoration:none;--i:${i}"><div style="position:absolute;right:-30px;top:-30px;opacity:.28;z-index:-1" class="${i ? "" : "float"}">${mark("", 240)}</div><h2 class="h2">${b[0]}</h2><p style="max-width:380px;opacity:.85">${b[1]}</p><span class="btn w s" style="width:fit-content;margin-top:10px">Ver mais →</span></a>`).join("")}</section>
+  <div class="marq dark" aria-hidden="true" style="margin-top:80px"><div class="t rev">${[0, 1].map(() => `<span class="i">${Array.from({ length: 6 }, (_, i) => `<span style="${i % 2 ? "color:var(--brand)" : "-webkit-text-stroke:2px #fff;color:transparent"}">${esc(S.settings.name)}</span>${mark("", 52)}`).join("")}</span>`).join("")}</div></div>
   ${footer()}`;
 }
 function catalog() {
@@ -400,6 +401,13 @@ function render() {
   else html = home();
   const y = scrollY, keep = document.activeElement?.id;
   app.innerHTML = html;
+  if (!S.ui.keepScroll) { app.classList.remove("pgin"); void app.offsetWidth; app.classList.add("pgin"); }
+  const hb = $("#herobox"), tc = $("#tiltcard");
+  if (hb && !matchMedia("(prefers-reduced-motion: reduce), (pointer: coarse)").matches) {
+    hb.addEventListener("pointermove", (e) => { const r = hb.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height; hb.style.setProperty("--mx", x * 100 + "%"); hb.style.setProperty("--my", y * 100 + "%"); if (tc) { tc.style.setProperty("--rx", (0.5 - y) * 8 + "deg"); tc.style.setProperty("--ry", (x - 0.5) * 10 + "deg"); } });
+    hb.addEventListener("pointerleave", () => { if (tc) { tc.style.setProperty("--rx", "0deg"); tc.style.setProperty("--ry", "0deg"); } });
+  }
+  if (S.ui.confetti) { S.ui.confetti = false; confetti(); }
   $("#b-loja").classList.toggle("on", r[0] !== "admin"); $("#b-admin").classList.toggle("on", r[0] === "admin");
   document.title = (r[0] === "admin" ? "Painel — " : "") + S.settings.name + " — Demonstração";
   if (keep) { const e = document.getElementById(keep); if (e && e.value !== undefined && e.type !== "checkbox") { e.focus(); try { e.setSelectionRange(e.value.length, e.value.length); } catch {} } }
@@ -410,6 +418,12 @@ function render() {
 const rerender = () => { S.ui.keepScroll = true; render(); };
 window.addEventListener("hashchange", () => { closeModal(); $(".drawer")?.remove(); S.ui.sel = S.ui.sel; render(); scrollTo(0, 0); });
 
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cols = ["#a5c910", "#e4f58a", "#0b102d", "#fff"], box = document.createElement("div"); box.setAttribute("aria-hidden", "true");
+  for (let k = 0; k < 48; k++) { const s = document.createElement("span"); s.className = "confetti"; s.style.cssText = `left:${Math.random() * 100}%;background:${cols[k % 4]};border:1px solid rgba(11,16,45,.15);--dx:${(Math.random() - 0.5) * 220}px;--rot:${360 + Math.random() * 720}deg;--dur:${2.6 + Math.random() * 1.8}s;--delay:${Math.random() * 0.6}s`; box.appendChild(s); }
+  document.body.appendChild(box); setTimeout(() => box.remove(), 6000);
+}
 /* ===== eventos ===== */
 document.addEventListener("click", (ev) => {
   const el = ev.target.closest("[data-a]"); if (!el) return;
@@ -483,7 +497,7 @@ document.addEventListener("submit", (e) => {
     const o = { id: uid() + uid(), number: "LF-" + uid().toUpperCase().slice(0, 8), name: c.name, phone: c.phone.replace(/\D/g, ""), items: lines.map((l) => ({ pid: l.pid, vid: l.vid, name: l.name, size: l.size, color: l.color, qty: l.qty, unit: l.unit })), subtotal: q.sub, discount: q.discount, coupon: q.coupon, shipping: q.ship, total: q.total, status: "pending_contact", committed: false, paid: null, created: new Date().toISOString(), history: [{ from: null, to: "pending_contact", at: new Date().toISOString(), note: "Pedido registrado pelo site" }] };
     if (q.coupon) S.coupons.find((x) => x.code === q.coupon).used++;
     S.orders.push(o); S.cart = []; S.ui.checkout = null; S.ui.coupon = ""; save(); ordering = false;
-    go("pedido/" + o.id); toast("Pedido registrado!");
+    S.ui.confetti = true; go("pedido/" + o.id); toast("Pedido registrado!");
   }
   if (k === "status") { const o = S.orders.find((x) => x.id === f.dataset.id), err = setStatus(o, $("#ns").value, $("#nn").value); if (err) { toast(err); return; } save(); rerender(); toast("Status atualizado"); }
   if (k === "stock") {

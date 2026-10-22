@@ -160,12 +160,27 @@ th{background:var(--mist);text-align:left;font:700 11px Inter;text-transform:upp
 .rise{animation:rise .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*90ms)}
 .float{animation:float 7s ease-in-out infinite}.spin{animation:spin 24s linear infinite;transform-origin:center}
 .rv{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*90ms)}.rv.in{opacity:1;transform:none}
+/* mais movimento */
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}.pgin{animation:pageIn .55s cubic-bezier(.2,.7,.2,1) both}
+@keyframes prog{to{transform:scaleX(1)}}#prog{position:fixed;inset:0 0 auto 0;height:4px;background:var(--brand);transform:scaleX(0);transform-origin:0 50%;z-index:130;pointer-events:none}
+@supports(animation-timeline:scroll()){#prog{animation:prog linear both;animation-timeline:scroll(root)}}
+@keyframes sweep{to{transform:translateX(260%) skewX(-20deg)}}.btn.p{position:relative;overflow:hidden;isolation:isolate}.btn.p::after{content:"";position:absolute;inset:0 auto 0 -60%;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-20deg);z-index:-1}.btn.p:hover::after{animation:sweep .8s ease}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(165,201,16,.6)}100%{box-shadow:0 0 0 22px transparent}}.ring{animation:ring 2.2s ease-out infinite}
+@keyframes pop{0%{transform:scale(.4)}55%{transform:scale(1.35)}100%{transform:scale(1)}}.pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes wordIn{from{opacity:0;transform:translateY(.6em) rotate(3deg);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}.word{display:inline-block;animation:wordIn .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--w,0)*90ms + 150ms)}
+@keyframes gx{to{background-position:200% 50%}}.shimmer{background:linear-gradient(90deg,var(--brand),var(--accent),#fff,var(--accent),var(--brand));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gx 6s linear infinite}
+.glow{background-image:radial-gradient(520px circle at var(--mx,70%) var(--my,20%),rgba(165,201,16,.28),transparent 60%)}.tilt{transition:transform .15s ease-out;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+@keyframes printOut{from{clip-path:inset(0 0 100% 0);transform:translateY(-24px)}to{clip-path:inset(0);transform:none}}.receipt{animation:printOut 1.8s cubic-bezier(.4,0,.2,1) both}
+@keyframes conf{0%{transform:translate3d(0,-10vh,0) rotate(0);opacity:1}100%{transform:translate3d(var(--dx),105vh,0) rotate(var(--rot));opacity:.9}}.confetti{position:fixed;top:0;z-index:140;width:10px;height:16px;border-radius:3px;pointer-events:none;animation:conf var(--dur,3.2s) cubic-bezier(.3,.6,.4,1) forwards;animation-delay:var(--delay,0s)}
+.marq .t.rev{animation-direction:reverse;animation-duration:40s}
+.hdr nav a{position:relative}.hdr nav a::after{content:"";position:absolute;left:16px;right:16px;bottom:5px;height:2px;background:var(--brand);transform:scaleX(0);transform-origin:left;transition:transform .3s}.hdr nav a:hover::after{transform:scaleX(1)}
 @media print{body>*:not(#print){display:none!important}#print{display:block!important}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<div id="app"></div>
+<div id="prog" aria-hidden="true"></div>
+<div id="app" class="pgin"></div>
 <div id="print" style="display:none"></div>
 <div id="demobar" role="navigation" aria-label="Alternar demonstração">
   <button data-a="mode" data-m="loja" id="b-loja">🛍 Loja (cliente)</button>

@@ -1,11 +1,11 @@
 import { BrandMark } from "./brand-mark";
 
 /** Faixa animada com o nome da loja (decorativa, oculta de leitores de tela). */
-export function Marquee({ text }: { text: string }) {
+export function Marquee({ text, reverse }: { text: string; reverse?: boolean }) {
   const items = Array.from({ length: 8 }, (_, i) => i);
   return (
     <div className="marquee mt-6 overflow-hidden bg-ink py-5 text-white sm:mt-10 sm:py-7" aria-hidden>
-      <div className="marquee-track">
+      <div className={`marquee-track ${reverse ? "reverse" : ""}`}>
         {[0, 1].map((k) => (
           <div key={k} className="flex shrink-0 items-center gap-8 pr-8 font-display text-5xl font-extrabold tracking-tight sm:gap-12 sm:pr-12 sm:text-8xl">
             {items.map((i) => (
