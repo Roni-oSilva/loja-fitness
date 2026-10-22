@@ -84,9 +84,9 @@ export function CategoryGrid({ categories }: { categories: (Category & { count: 
             <li key={c.id} className="reveal" style={delay(i % 4)}>
               <Link href={`/categoria/${c.slug}`} className={`on-dark lift group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-[2rem] p-5 sm:aspect-square ${CAT_TONE[i % CAT_TONE.length]}`}>
                 {c.image_url && <SafeImage src={c.image_url} alt="" sizes="(min-width:1024px) 25vw, 50vw" className="object-cover opacity-80 transition duration-700 group-hover:scale-110 motion-reduce:transition-none" />}
-                {!c.image_url && <Icon aria-hidden className="absolute -right-4 -top-4 size-40 rotate-12 opacity-20 transition duration-700 group-hover:-rotate-6 group-hover:scale-110" strokeWidth={1.25} />}
+                {!c.image_url && <Icon aria-hidden className="absolute -bottom-6 -right-6 size-44 -rotate-12 opacity-[.14] transition duration-700 group-hover:rotate-0 group-hover:scale-110" strokeWidth={1.5} />}
                 {c.image_url && <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent" />}
-                <span className="relative mb-auto grid size-12 place-items-center rounded-2xl bg-white/15 backdrop-blur transition group-hover:rotate-6 group-hover:scale-110"><Icon className="size-6" aria-hidden /></span>
+                <span className="relative mb-auto grid size-14 place-items-center rounded-2xl bg-white text-ink shadow-lg ring-4 ring-black/5 transition group-hover:-rotate-6 group-hover:scale-110"><Icon className="size-7" strokeWidth={2.25} aria-hidden /></span>
                 <span className="absolute right-4 top-4 grid size-10 place-items-center rounded-full bg-white text-ink transition duration-300 group-hover:rotate-45"><ArrowUpRight className="size-5" aria-hidden /></span>
                 <span className="relative font-display text-2xl font-extrabold leading-tight sm:text-3xl">{c.name}</span>
                 <span className="relative mt-1 text-xs opacity-80">{c.count} {c.count === 1 ? "produto" : "produtos"}</span>

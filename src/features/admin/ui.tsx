@@ -109,7 +109,7 @@ export function ImageField({ name, label, folder, initial, multiple, max = 8, wi
             <div className="relative"><img src={it.url} alt="" className="aspect-square w-full rounded-2xl border border-neutral-200 object-cover" />
               <button type="button" aria-label={`Remover imagem ${i + 1}`} onClick={() => setItems(items.filter((_, k) => k !== i))} className="absolute -right-2 -top-2 grid size-7 place-items-center rounded-full bg-red-700 text-white"><X className="size-4" aria-hidden /></button></div>
             {withAlt && <input aria-label={`Texto alternativo da imagem ${i + 1}`} placeholder="Texto alternativo" maxLength={200} value={it.alt} onChange={(e) => setItems(items.map((x, k) => (k === i ? { ...x, alt: e.target.value } : x)))} className="field mt-1 min-h-9 text-xs" />}
-            {multiple && i > 0 && <button type="button" className="mt-1 text-xs underline" onClick={() => { const c = [...items]; [c[i - 1], c[i]] = [c[i] as never, c[i - 1] as never]; setItems(c); }}>← mover</button>}
+            {multiple && i > 0 && <button type="button" className="mt-1 text-xs underline" onClick={() => { const c = [...items]; [c[i - 1], c[i]] = [c[i] as never, c[i - 1] as never]; setItems(c); }}>mover para trás</button>}
           </li>
         ))}
         {(multiple ? items.length < max : true) && (

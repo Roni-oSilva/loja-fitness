@@ -24,7 +24,7 @@ export default async function Banners({ searchParams }: { searchParams: Promise<
         <tbody className="divide-y divide-neutral-100">
           {(data ?? []).length ? (data ?? []).map((b) => {
             const live = b.is_active && (!b.starts_at || Date.parse(b.starts_at) <= now) && (!b.ends_at || Date.parse(b.ends_at) > now);
-            return <tr key={b.id}><Td>{b.sort_order}</Td><Td className="font-semibold">{b.title}</Td><Td>{b.starts_at || b.ends_at ? `${dt(b.starts_at)} → ${dt(b.ends_at)}` : "Sempre"}</Td><Td><Pill ok={live} yes="No ar" no={b.is_active ? "Fora do período" : "Inativo"} /></Td>
+            return <tr key={b.id}><Td>{b.sort_order}</Td><Td className="font-semibold">{b.title}</Td><Td>{b.starts_at || b.ends_at ? `${dt(b.starts_at)} até ${dt(b.ends_at)}` : "Sempre"}</Td><Td><Pill ok={live} yes="No ar" no={b.is_active ? "Fora do período" : "Inativo"} /></Td>
               <Td><div className="flex gap-2"><Link href={`/admin/banners?editar=${b.id}`} className="btn btn-outline btn-sm">Editar</Link><ConfirmButton action={deleteBannerAction} hidden={{ id: b.id }} label="Excluir" message={`Excluir o banner "${b.title}"?`} /></div></Td></tr>;
           }) : <NoRows cols={5} text="Nenhum banner cadastrado." />}
         </tbody>

@@ -27,7 +27,7 @@ export default async function EditProduct({ params }: { params: Promise<{ id: st
     <>
       <PageHeader title={p.name} subtitle={p.is_demo ? "Produto de demonstração" : undefined} action={
         <div className="flex flex-wrap gap-2">
-          {p.status === "published" && <Link href={`/produto/${p.slug}`} target="_blank" className="btn btn-outline btn-sm">Ver na loja ↗</Link>}
+          {p.status === "published" && <Link href={`/produto/${p.slug}`} target="_blank" className="btn btn-outline btn-sm">Ver na loja</Link>}
           {p.status !== "archived" ? <ConfirmButton action={archiveProductAction} hidden={{ id: p.id, to: "archived" }} label="Arquivar" message="Arquivar este produto? Ele sai da loja, mas o histórico de pedidos é mantido." />
             : <ConfirmButton action={archiveProductAction} hidden={{ id: p.id, to: "draft" }} label="Restaurar como rascunho" danger={false} message="Mover o produto para rascunho?" />}
         </div>} />

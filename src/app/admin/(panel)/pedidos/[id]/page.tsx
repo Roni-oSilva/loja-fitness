@@ -29,7 +29,7 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
   const paid = !!o.payment_received_at;
   return (
     <>
-      <PageHeader title={`Pedido ${o.order_number}`} subtitle={`Criado em ${dt(o.created_at)} · atualizado em ${dt(o.updated_at)}`} action={<Link href="/admin/pedidos" className="btn btn-outline btn-sm">← Voltar</Link>} />
+      <PageHeader title={`Pedido ${o.order_number}`} subtitle={`Criado em ${dt(o.created_at)} · atualizado em ${dt(o.updated_at)}`} action={<Link href="/admin/pedidos" className="btn btn-outline btn-sm">Voltar</Link>} />
       <div className="grid gap-6 xl:grid-cols-[1fr_24rem]">
         <div className="space-y-6">
           <Panel title="Situação">
@@ -69,7 +69,7 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
             <ActionForm action={saveOrderNotesAction} submitLabel="Salvar observações"><input type="hidden" name="order_id" value={o.id} /><TextArea name="admin_notes" label="Visível apenas para a equipe" defaultValue={o.admin_notes ?? ""} rows={3} maxLength={2000} /></ActionForm>
           </Panel>
           <Panel title="Histórico de status">
-            <ol className="space-y-2 text-sm">{(hist ?? []).map((h: any) => <li key={h.id} className="flex flex-wrap gap-x-2 border-l-4 border-brand pl-3"><span className="text-neutral-600">{dt(h.created_at)}</span><span>{h.previous_status ? `${ORDER_STATUS_LABEL[h.previous_status as OrderStatus]} → ` : ""}<strong>{ORDER_STATUS_LABEL[h.new_status as OrderStatus]}</strong></span>{h.note && <span className="text-neutral-700">— {h.note}</span>}</li>)}</ol>
+            <ol className="space-y-2 text-sm">{(hist ?? []).map((h: any) => <li key={h.id} className="flex flex-wrap gap-x-2 border-l-4 border-brand pl-3"><span className="text-neutral-600">{dt(h.created_at)}</span><span>{h.previous_status ? `${ORDER_STATUS_LABEL[h.previous_status as OrderStatus]} para ` : ""}<strong>{ORDER_STATUS_LABEL[h.new_status as OrderStatus]}</strong></span>{h.note && <span className="text-neutral-700">— {h.note}</span>}</li>)}</ol>
           </Panel>
         </div>
         <div>
