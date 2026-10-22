@@ -14,7 +14,7 @@ interface Props { src: string; alt: string; sizes?: string; priority?: boolean; 
 export function SafeImage({ src, alt, sizes = "100vw", priority, className, ...rest }: Props) {
   if (src.endsWith(".svg") || !allowed(src)) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={alt} loading={priority ? "eager" : "lazy"} decoding="async" className={className} style={rest.fill ? { position: "absolute", inset: 0, width: "100%", height: "100%" } : undefined} />;
+    return <img src={src} alt={alt} loading={priority ? "eager" : "lazy"} decoding="async" className={className} style={(rest.fill ?? true) ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" } : undefined} />;
   }
   return <Image src={src} alt={alt} sizes={sizes} priority={priority} className={className} fill={rest.fill ?? true} />;
 }

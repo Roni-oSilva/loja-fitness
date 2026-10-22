@@ -30,7 +30,7 @@ export default async function Stock({ searchParams }: { searchParams: Promise<{ 
         <div><label htmlFor="filtro" className="label">Situação</label><select id="filtro" name="filtro" defaultValue={sp.filtro ?? ""} className="field"><option value="">Todos</option><option value="baixo">Estoque baixo</option><option value="zerado">Indisponíveis (zerado)</option></select></div>
         <button className="btn btn-dark btn-sm">Filtrar</button><Link href="/admin/estoque" className="btn btn-outline btn-sm">Limpar</Link>
       </form>
-      {error && <p role="alert" className="mb-3 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar o estoque.</p>}
+      {error && <p role="alert" className="mb-3 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar o estoque.</p>}
       <TableWrap>
         <thead className="bg-mist"><tr><Th>Produto</Th><Th>Variante</Th><Th>SKU</Th><Th>Saldo</Th><Th>Nova movimentação</Th></tr></thead>
         <tbody className="divide-y divide-neutral-100">

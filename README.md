@@ -4,7 +4,7 @@ Loja virtual de artigos fitness com landing page, catálogo, carrinho, **pedido 
 
 **Stack:** Next.js 16 (App Router) · TypeScript estrito · Tailwind CSS 4 · Supabase (PostgreSQL, Auth, Storage) · Zod · Vercel.
 
-O nome da loja é provisório e configurável (Admin → Configurações). Nada de endereço, CNPJ, avaliações ou depoimentos é inventado.
+Identidade **Ana Fitness** (navy `#0B102D` + verde-limão `#A5C910`, logo em `public/brand/`), configurável em Admin → Configurações (nome, logo, cores). Nada de endereço, CNPJ, avaliações ou depoimentos é inventado.
 
 ## Como funciona a compra
 
@@ -66,7 +66,7 @@ Funções: **admin** (tudo) · **manager** (pedidos, estoque, cupons, clientes, 
 - **WhatsApp** (DDI+DDD, ex.: `5511999998888`) — sem ele não é possível finalizar pedidos.
 - Nome da loja, **logotipo** (usado no topo, rodapé e recibo), favicon, cores, redes sociais, e-mail, condições de entrega, frete grátis (só é anunciado/aplicado se preenchido).
 - **Fotos do hero** e dos produtos (as imagens `/demo/*.svg` são ilustrativas).
-- Textos de privacidade, termos e trocas (hoje há modelos provisórios sinalizados na página — **revise com um profissional**).
+- Textos de **política de gestão**, privacidade, termos e trocas (hoje há modelos provisórios sinalizados na página — **revise com um profissional**).
 - Arquive os produtos de demonstração.
 
 ## Deploy (Vercel)

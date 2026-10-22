@@ -5,7 +5,7 @@ export function LegalPage({ title, text, fallback }: { title: string; text: stri
   return (
     <div className="container-x max-w-3xl py-10 sm:py-14">
       <h1 className="h-section">{title}</h1>
-      {!text && <p className="mt-4 rounded-md bg-amber-50 p-3 text-sm font-semibold text-amber-900">{LEGAL_DISCLAIMER}</p>}
+      {!text && <p className="mt-4 rounded-2xl bg-amber-50 p-3 text-sm font-semibold text-amber-900">{LEGAL_DISCLAIMER}</p>}
       <div className="mt-6 space-y-4 leading-relaxed text-neutral-800">
         {body.split(/\n{2,}/).map((para, i) => {
           const [first, ...rest] = para.split("\n");

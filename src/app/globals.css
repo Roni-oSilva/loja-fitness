@@ -1,60 +1,81 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
-@import "@fontsource/barlow-condensed/600.css";
-@import "@fontsource/barlow-condensed/700.css";
-@import "@fontsource/barlow-condensed/800.css";
+@import "@fontsource-variable/outfit";
 @import "@fontsource/courier-prime/400.css";
 @import "@fontsource/courier-prime/700.css";
 
-/* Tokens de tema: sobrescritos em runtime pelas configurações da loja (layout). */
+/* Tokens de tema (identidade Ana Fitness): sobrescritos em runtime pelas configurações da loja. */
 :root {
-  --brand: #ff5a1f;
-  --accent: #b8f531;
-  --ink: #111318;
-  --graphite: #282b32;
-  --mist: #f3f4f6;
+  --brand: #a5c910;   /* verde-limão da logo */
+  --accent: #e4f58a;  /* limão claro */
+  --ink: #0b102d;     /* navy da logo */
+  --graphite: #1b2250;
+  --mist: #f3f6ea;
 }
 
 @theme inline {
   --color-brand: var(--brand);
-  --color-brand-strong: color-mix(in srgb, var(--brand) 70%, black);
+  --color-brand-strong: color-mix(in srgb, var(--brand) 55%, black);
   --color-accent: var(--accent);
   --color-ink: var(--ink);
   --color-graphite: var(--graphite);
   --color-mist: var(--mist);
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-display: "Outfit Variable", "Inter Variable", sans-serif;
   --breakpoint-xs: 26rem;
 }
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body { font-family: var(--font-sans); color: var(--ink); background: #fff; overflow-x: clip; }
-h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: 0.01em; }
+h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
 
-:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; border-radius: 4px; }
-.on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--accent); box-shadow: 0 0 0 5px var(--ink); }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; border-radius: 1rem; }
+.on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--brand); box-shadow: 0 0 0 5px var(--ink); }
+::selection { background: var(--brand); color: var(--ink); }
 
 @layer components {
-  .btn { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-6 py-3 font-display text-lg font-bold uppercase tracking-wide transition active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50; }
-  .btn-primary { @apply bg-brand text-ink hover:brightness-95; }
+  .btn { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3 font-display text-base font-bold tracking-tight transition duration-300 ease-out active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 hover:-translate-y-0.5; }
+  .btn-primary { @apply bg-brand text-ink shadow-[0_6px_0_-2px_rgba(0,0,0,.18)] hover:shadow-[0_10px_20px_-6px_color-mix(in_srgb,var(--brand)_70%,transparent)]; }
   .btn-dark { @apply bg-ink text-white hover:bg-graphite; }
   .btn-outline { @apply border-2 border-ink bg-white text-ink hover:bg-ink hover:text-white; }
-  .btn-sm { @apply min-h-10 px-4 py-2 text-base; }
-  .field { @apply min-h-12 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-ink placeholder:text-neutral-500 focus:border-ink; }
+  .btn-sm { @apply min-h-10 px-5 py-2 text-sm; }
+  .field { @apply min-h-12 w-full rounded-2xl border border-neutral-300 bg-white px-4 py-2 text-base text-ink transition placeholder:text-neutral-500 focus:border-ink; }
   .label { @apply mb-1 block text-sm font-semibold text-graphite; }
   .container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
-  .card { @apply rounded-xl border border-neutral-200 bg-white; }
-  .eyebrow { @apply font-display text-sm font-bold uppercase tracking-[0.2em] text-brand-strong; }
-  .h-section { @apply font-display text-3xl font-extrabold uppercase leading-none sm:text-5xl; }
+  .card { @apply rounded-3xl border border-neutral-200 bg-white; }
+  .eyebrow { @apply inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1 font-display text-xs font-bold uppercase tracking-[0.18em] text-ink; }
+  .h-section { @apply font-display text-4xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl; }
+  .bubble { @apply rounded-[2.5rem]; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+/* ===== Movimento ===== */
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 90ms); }
+
+@keyframes float { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(0,-18px,0) scale(1.06); } }
+.float { animation: float 7s ease-in-out infinite; }
+.float-slow { animation: float 11s ease-in-out infinite reverse; }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 24s linear infinite; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes pulse-bg { 50% { opacity: .5; } }
+.skeleton { background: #e5e7eb; border-radius: 1.25rem; animation: pulse-bg 1.4s ease-in-out infinite; }
+@keyframes shine { to { background-position: 200% 0; } }
+.shine { background-image: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%); background-size: 200% 100%; animation: shine 3.5s linear infinite; }
+
+/* Entrada ao rolar (CSS puro; sem suporte, o conteúdo simplesmente aparece) */
+@supports (animation-timeline: view()) {
+  .reveal { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
 }
-@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-.rise { animation: rise 0.5s ease-out both; }
-@keyframes pulse-bg { 50% { opacity: 0.5; } }
-.skeleton { background: #e5e7eb; border-radius: 0.5rem; animation: pulse-bg 1.4s ease-in-out infinite; }
+.lift { transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s; }
+.lift:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -22px rgba(11,16,45,.45); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
 
 /* Recibo (papel térmico) */
 .receipt { font-family: "Courier Prime", "Courier New", monospace; color: #2b2b2b;

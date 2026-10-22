@@ -53,7 +53,7 @@ export function ProductPurchase({ productId, name, slug, imageUrl, variants, siz
 
   const Opt = ({ label, state, selected, onClick }: { label: string; state: string; selected: boolean; onClick: () => void }) => (
     <button type="button" role="radio" aria-checked={selected} disabled={state === "none"} onClick={onClick}
-      className={cn("min-h-11 min-w-12 rounded-md border-2 px-3 text-sm font-bold transition", selected ? "border-ink bg-ink text-white" : "border-neutral-300 bg-white hover:border-ink",
+      className={cn("min-h-11 min-w-12 rounded-2xl border-2 px-3 text-sm font-bold transition", selected ? "border-ink bg-ink text-white" : "border-neutral-300 bg-white hover:border-ink",
         state === "soldout" && !selected && "text-neutral-500 line-through", state === "none" && "cursor-not-allowed opacity-30")}>
       {label}{state === "soldout" && <span className="sr-only"> (esgotado)</span>}
     </button>
@@ -80,7 +80,7 @@ export function ProductPurchase({ productId, name, slug, imageUrl, variants, siz
       )}
 
       <div className="mt-6 flex items-center gap-4">
-        <div className="flex items-center rounded-md border-2 border-neutral-300" role="group" aria-label="Quantidade">
+        <div className="flex items-center rounded-2xl border-2 border-neutral-300" role="group" aria-label="Quantidade">
           <button type="button" className="grid size-11 place-items-center disabled:opacity-40" aria-label="Diminuir quantidade" disabled={qty <= 1} onClick={() => setQty((q) => Math.max(1, q - 1))}><Minus className="size-4" aria-hidden /></button>
           <output className="w-10 text-center font-bold" aria-live="polite">{qty}</output>
           <button type="button" className="grid size-11 place-items-center disabled:opacity-40" aria-label="Aumentar quantidade" disabled={!!variant && qty >= Math.min(stock, 99)} onClick={() => setQty((q) => clampQuantity(q + 1, variant ? variant.stock : 99))}><Plus className="size-4" aria-hidden /></button>
@@ -95,7 +95,7 @@ export function ProductPurchase({ productId, name, slug, imageUrl, variants, siz
         </p>
       </div>
 
-      {error && <p role="alert" className="mt-4 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">{error}</p>}
+      {error && <p role="alert" className="mt-4 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">{error}</p>}
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <button type="button" className="btn btn-primary" disabled={!anyStock} onClick={add}>
           {added ? <Check className="size-5" aria-hidden /> : <ShoppingBag className="size-5" aria-hidden />}{added ? "Adicionado" : "Adicionar ao carrinho"}

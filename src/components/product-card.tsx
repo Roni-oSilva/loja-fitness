@@ -7,8 +7,8 @@ import type { ProductCardData } from "@/lib/catalog-filter";
 
 export function ProductCard({ p, priority }: { p: ProductCardData; priority?: boolean }) {
   return (
-    <article className="group relative flex flex-col">
-      <Link href={`/produto/${p.slug}`} className="relative block aspect-[4/5] overflow-hidden rounded-xl bg-mist" aria-label={`Ver ${p.name}`}>
+    <article className="reveal group relative flex flex-col">
+      <Link href={`/produto/${p.slug}`} className="lift relative block aspect-[4/5] overflow-hidden rounded-[2rem] bg-mist" aria-label={`Ver ${p.name}`}>
         {p.image ? (
           <SafeImage src={p.image.url} alt={p.image.alt} sizes="(min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw" priority={priority}
             className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none" />

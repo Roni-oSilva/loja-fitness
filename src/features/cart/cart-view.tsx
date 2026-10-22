@@ -79,8 +79,8 @@ export function CartView({ whatsappReady, freeShippingHint }: { whatsappReady: b
       <div className="flex items-end justify-between gap-4"><h1 className="h-section">Carrinho</h1>
         {confirmClear ? <span className="flex items-center gap-2 text-sm">Esvaziar?<button type="button" className="btn btn-dark btn-sm" onClick={() => { cartActions.clear(); setConfirmClear(false); }}>Sim</button><button type="button" className="btn btn-outline btn-sm" onClick={() => setConfirmClear(false)}>Não</button></span>
           : <button type="button" className="text-sm font-semibold underline" onClick={() => setConfirmClear(true)}>Esvaziar carrinho</button>}</div>
-      {notice && <p role="status" className="mt-4 flex items-start gap-2 rounded-md bg-amber-50 p-3 text-sm font-semibold text-amber-900"><AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />{notice}</p>}
-      {loadError && <p role="alert" className="mt-4 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">{loadError} <button type="button" className="underline" onClick={() => refresh(couponApplied)}>Tentar de novo</button></p>}
+      {notice && <p role="status" className="mt-4 flex items-start gap-2 rounded-2xl bg-amber-50 p-3 text-sm font-semibold text-amber-900"><AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />{notice}</p>}
+      {loadError && <p role="alert" className="mt-4 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">{loadError} <button type="button" className="underline" onClick={() => refresh(couponApplied)}>Tentar de novo</button></p>}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_24rem]">
         <ul className="divide-y divide-neutral-200 border-y border-neutral-200">
@@ -94,7 +94,7 @@ export function CartView({ whatsappReady, freeShippingHint }: { whatsappReady: b
                   <p className="text-sm text-neutral-600">{[l.size && `Tam ${l.size}`, l.color].filter(Boolean).join(" · ")}</p>
                   {q?.problem && <p role="alert" className="mt-1 flex items-center gap-1 text-sm font-bold text-red-700"><AlertTriangle className="size-4" aria-hidden />{PROBLEM[q.problem]}{q.problem === "insufficient_stock" && ` Disponível: ${q.stock}.`}</p>}
                   <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center rounded-md border-2 border-neutral-300" role="group" aria-label={`Quantidade de ${l.name}`}>
+                    <div className="flex items-center rounded-2xl border-2 border-neutral-300" role="group" aria-label={`Quantidade de ${l.name}`}>
                       <button type="button" className="grid size-11 place-items-center disabled:opacity-40" aria-label="Diminuir" disabled={l.quantity <= 1} onClick={() => cartActions.setQuantity(l.variantId, l.quantity - 1)}><Minus className="size-4" aria-hidden /></button>
                       <output className="w-9 text-center font-bold">{l.quantity}</output>
                       <button type="button" className="grid size-11 place-items-center disabled:opacity-40" aria-label="Aumentar" disabled={l.quantity >= maxQty} onClick={() => cartActions.setQuantity(l.variantId, l.quantity + 1)}><Plus className="size-4" aria-hidden /></button>
@@ -134,7 +134,7 @@ export function CartView({ whatsappReady, freeShippingHint }: { whatsappReady: b
             <label className="flex items-start gap-2 text-xs"><input type="checkbox" className="mt-0.5 size-5 shrink-0 accent-[--brand]" checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} />
               <span>Concordo em usar meu nome{form.phone ? " e telefone" : ""} para atender este pedido, conforme a <Link href="/politica-de-privacidade" className="underline" target="_blank">Política de Privacidade</Link>.</span></label>
             {errors.consent && <p className="text-sm text-red-700">{errors.consent}</p>}
-            {submitError && <p role="alert" className="rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">{submitError}</p>}
+            {submitError && <p role="alert" className="rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">{submitError}</p>}
             <button type="submit" className="btn btn-primary w-full" disabled={blocked || pending || !whatsappReady} aria-busy={pending}>
               {pending ? <Loader2 className="size-5 animate-spin" aria-hidden /> : <MessageCircle className="size-5" aria-hidden />}{pending ? "Registrando pedido…" : "Finalizar pelo WhatsApp"}
             </button>

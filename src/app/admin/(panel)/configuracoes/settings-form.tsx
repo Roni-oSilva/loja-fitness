@@ -55,9 +55,10 @@ export function SettingsForm({ s }: { s: StoreSettings }) {
               <input aria-label={`Descrição da imagem ${i + 1}`} placeholder="Descrição da imagem" className="field min-h-10" maxLength={120} value={b.alt} onChange={(ev) => setSocial(social.map((x, k) => (k === i ? { ...x, alt: ev.target.value } : x)))} /></div>)}</div></div>
         </Section>
         <Section title="Textos legais e SEO">
-          <p className="rounded-md bg-amber-50 p-3 text-xs font-semibold text-amber-900">Enquanto estes campos estiverem vazios, o site mostra textos-modelo provisórios. Revise com um profissional antes de lançar.</p>
+          <p className="rounded-2xl bg-amber-50 p-3 text-xs font-semibold text-amber-900">Enquanto estes campos estiverem vazios, o site mostra textos-modelo provisórios. Revise com um profissional antes de lançar.</p>
           <TextArea name="privacy_text" label="Política de privacidade" rows={6} defaultValue={s.privacy_text ?? ""} error={e.privacy_text} maxLength={20000} />
           <TextArea name="terms_text" label="Termos de uso" rows={6} defaultValue={s.terms_text ?? ""} error={e.terms_text} maxLength={20000} />
+          <TextArea name="management_text" label="Política de gestão (pedidos, estoque, atendimento e dados)" rows={6} defaultValue={s.management_text ?? ""} error={e.management_text} maxLength={20000} />
           <TextArea name="returns_text" label="Trocas e devoluções" rows={6} defaultValue={s.returns_text ?? ""} error={e.returns_text} maxLength={12000} />
           <div className="grid gap-4 sm:grid-cols-2"><TextInput name="seo_title" label="Título SEO global" defaultValue={s.seo_title ?? ""} error={e.seo_title} maxLength={70} /><TextInput name="seo_description" label="Descrição SEO global" defaultValue={s.seo_description ?? ""} error={e.seo_description} maxLength={160} /></div>
         </Section>

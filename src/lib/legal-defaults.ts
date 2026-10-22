@@ -36,6 +36,24 @@ Descontos dependem das regras de cada campanha e da confirmação do pedido pela
 
 [Complemente com as demais condições da sua operação: razão social, CNPJ, foro, etc.]`;
 
+export const DEFAULT_MANAGEMENT = `Como gerenciamos pedidos
+Todo pedido feito no site é registrado com número único e fica "aguardando contato" até a nossa equipe falar com você pelo WhatsApp. Só depois da confirmação de disponibilidade, frete e pagamento o pedido passa a "confirmado". Registrar o pedido não significa pagamento nem venda concluída.
+
+Como gerenciamos o estoque
+O estoque é reservado somente quando o pedido é confirmado. Se um pedido confirmado for cancelado, as unidades voltam ao estoque. Toda alteração de estoque fica registrada com data, motivo e responsável.
+
+Preços, promoções e cupons
+Os valores exibidos são conferidos pelo sistema no momento do pedido. Promoções e cupons seguem as regras e a validade de cada campanha e são confirmados no atendimento.
+
+Atendimento
+O atendimento é feito pelo WhatsApp e pelos canais informados na página de contato. Respondemos conforme o horário de funcionamento da loja. [Informe aqui horários e prazos reais.]
+
+Acesso e proteção dos dados
+Somente a equipe autorizada acessa pedidos e dados de clientes, com níveis de permissão por função (administrador, gerente e editor). Coletamos apenas o necessário para o atendimento — veja a Política de Privacidade.
+
+Revisão
+Esta política pode ser atualizada. [Informe a data da última revisão e o responsável.]`;
+
 export const DEFAULT_RETURNS = `Trocas e devoluções
 [Descreva aqui a política real da loja: prazos, condições do produto, quem arca com o frete, como solicitar.]
 

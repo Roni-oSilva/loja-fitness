@@ -30,10 +30,10 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   const max = Math.max(1, ...(stats?.series.map((s) => s.confirmed_cents) ?? [0]));
   return (
     <>
-      <PageHeader title="Dashboard" subtitle={`Olá, ${staff.fullName || "equipe"}.`} action={stats && <nav aria-label="Período" className="flex flex-wrap gap-1">{PERIODS.map((p) => <Link key={p.d} href={`/admin?dias=${p.d}`} aria-current={p.d === days} className={`rounded-md px-3 py-2 text-sm font-bold ${p.d === days ? "bg-ink text-white" : "bg-white text-ink ring-1 ring-neutral-300"}`}>{p.l}</Link>)}</nav>} />
-      {sp.negado && <p role="alert" className="mb-4 rounded-md bg-amber-50 p-3 text-sm font-semibold text-amber-900">Você não tem permissão para acessar essa área.</p>}
+      <PageHeader title="Dashboard" subtitle={`Olá, ${staff.fullName || "equipe"}.`} action={stats && <nav aria-label="Período" className="flex flex-wrap gap-1">{PERIODS.map((p) => <Link key={p.d} href={`/admin?dias=${p.d}`} aria-current={p.d === days} className={`rounded-2xl px-3 py-2 text-sm font-bold ${p.d === days ? "bg-ink text-white" : "bg-white text-ink ring-1 ring-neutral-300"}`}>{p.l}</Link>)}</nav>} />
+      {sp.negado && <p role="alert" className="mb-4 rounded-2xl bg-amber-50 p-3 text-sm font-semibold text-amber-900">Você não tem permissão para acessar essa área.</p>}
       {staff.role === "editor" && <Panel title="Bem-vindo"><p className="text-sm">Seu perfil (editor) gerencia produtos, categorias e banners. Use o menu para navegar.</p></Panel>}
-      {failed && <p role="alert" className="rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar os indicadores. Tente recarregar a página.</p>}
+      {failed && <p role="alert" className="rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar os indicadores. Tente recarregar a página.</p>}
       {stats && (
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">

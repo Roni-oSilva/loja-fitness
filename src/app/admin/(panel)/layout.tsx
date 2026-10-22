@@ -26,8 +26,8 @@ export default async function PanelLayout({ children }: { children: React.ReactN
           <form action={logoutAction} className="lg:hidden"><button className="grid size-11 place-items-center" aria-label="Sair"><LogOut className="size-5" aria-hidden /></button></form>
         </div>
         <nav aria-label="Painel" className="flex gap-1 overflow-x-auto px-2 pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
-          {items.map((n) => <Link key={n.href} href={n.href} className="shrink-0 rounded-md px-3 py-2.5 text-sm font-semibold text-white/90 hover:bg-white/10">{n.label}</Link>)}
-          <Link href="/" target="_blank" className="shrink-0 rounded-md px-3 py-2.5 text-sm text-white/70 hover:bg-white/10">Ver loja ↗</Link>
+          {items.map((n) => <Link key={n.href} href={n.href} className="shrink-0 rounded-2xl px-3 py-2.5 text-sm font-semibold text-white/90 hover:bg-white/10">{n.label}</Link>)}
+          <Link href="/" target="_blank" className="shrink-0 rounded-2xl px-3 py-2.5 text-sm text-white/70 hover:bg-white/10">Ver loja ↗</Link>
         </nav>
         <form action={logoutAction} className="hidden p-4 lg:block"><button className="btn btn-outline btn-sm w-full !border-white/40 !bg-transparent !text-white hover:!bg-white/10"><LogOut className="size-4" aria-hidden />Sair</button></form>
       </aside>

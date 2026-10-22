@@ -17,7 +17,7 @@ export default async function Customers({ searchParams }: { searchParams: Promis
     <>
       <PageHeader title="Clientes" subtitle="Somente dados necessários ao atendimento. Nenhum dado de pagamento é armazenado." />
       <form className="mb-4 flex max-w-lg gap-2" role="search"><label htmlFor="q" className="sr-only">Buscar</label><input id="q" name="q" defaultValue={raw} placeholder="Nome, telefone ou e-mail" className="field" /><button className="btn btn-dark btn-sm">Buscar</button></form>
-      {error && <p role="alert" className="mb-3 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar os clientes.</p>}
+      {error && <p role="alert" className="mb-3 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar os clientes.</p>}
       <TableWrap>
         <thead className="bg-mist"><tr><Th>Nome</Th><Th>Telefone</Th><Th>E-mail</Th><Th>Pedidos</Th><Th>Confirmados</Th><Th>Desde</Th></tr></thead>
         <tbody className="divide-y divide-neutral-100">

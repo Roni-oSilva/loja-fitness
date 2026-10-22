@@ -57,6 +57,8 @@ begin
 end $$;
 
 update public.store_settings set
+  store_name = 'Ana Fitness', logo_url = '/brand/ana-fitness-logo.png',
+  theme_primary = '#A5C910', theme_accent = '#E4F58A', theme_dark = '#0B102D',
   tagline = 'Roupas, acessórios e equipamentos para o seu treino.',
   benefits = '[{"title":"Compra simples","description":"Escolha os produtos e finalize em poucos toques."},{"title":"Atendimento pelo WhatsApp","description":"Confirmamos disponibilidade, frete e pagamento com você."},{"title":"Trocas e devoluções","description":"Consulte a política da loja antes de comprar."}]'::jsonb,
   editorial = '[{"title":"VISTA SUA EVOLUÇÃO.","text":"Peças pensadas para acompanhar o seu treino.","image_url":null,"link":"/produtos"},{"title":"EQUIPAMENTO CERTO. FOCO TOTAL.","text":"Acessórios e equipamentos para a sua rotina.","image_url":null,"link":"/produtos"}]'::jsonb

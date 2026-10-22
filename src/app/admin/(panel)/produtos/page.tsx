@@ -28,7 +28,7 @@ export default async function Products({ searchParams }: { searchParams: Promise
         <div><label htmlFor="status" className="label">Status</label><select id="status" name="status" defaultValue={sp.status ?? ""} className="field"><option value="">Ativos (sem arquivados)</option><option value="published">Publicados</option><option value="draft">Rascunhos</option><option value="archived">Arquivados</option></select></div>
         <button className="btn btn-dark btn-sm">Filtrar</button><Link href="/admin/produtos" className="btn btn-outline btn-sm">Limpar</Link>
       </form>
-      {error && <p role="alert" className="mb-3 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar os produtos.</p>}
+      {error && <p role="alert" className="mb-3 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar os produtos.</p>}
       <TableWrap>
         <thead className="bg-mist"><tr><Th /><Th>Produto</Th><Th>Categoria</Th><Th>Preço</Th><Th>Estoque</Th><Th>Status</Th></tr></thead>
         <tbody className="divide-y divide-neutral-100">

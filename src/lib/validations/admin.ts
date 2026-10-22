@@ -139,7 +139,7 @@ export const settingsSchema = z.object({
   promo_bar_link: emptyToNull(linkSchema),
   free_shipping_threshold_cents: optionalMoney,
   delivery_info: optionalText(2000),
-  returns_text: optionalText(12000), privacy_text: optionalText(20000), terms_text: optionalText(20000),
+  returns_text: optionalText(12000), management_text: optionalText(20000), privacy_text: optionalText(20000), terms_text: optionalText(20000),
   hero_title: z.string().trim().min(2).max(120),
   hero_subtitle: z.string().trim().min(2).max(300),
   hero_cta_label: z.string().trim().min(2).max(40), hero_cta_link: linkSchema,

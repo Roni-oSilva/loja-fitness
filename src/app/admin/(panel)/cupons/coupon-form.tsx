@@ -26,7 +26,7 @@ export function CouponForm({ c, categories, products }: { c?: CouponFormData; ca
           <Field label="Categorias elegíveis" name="eligible_category_ids" hint="Vazio = todas. Ctrl/Cmd para várias."><select id="eligible_category_ids" name="eligible_category_ids" multiple size={5} defaultValue={c?.eligible_category_ids ?? []} className="field">{categories.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></Field>
           <Field label="Produtos elegíveis" name="eligible_product_ids" hint="Vazio = todos."><select id="eligible_product_ids" name="eligible_product_ids" multiple size={5} defaultValue={c?.eligible_product_ids ?? []} className="field">{products.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></Field>
         </div>
-        <p className="rounded-md bg-amber-50 p-3 text-xs font-semibold text-amber-900">Como a compra termina no WhatsApp, o desconto é validado no registro do pedido e confirmado no atendimento; não há aplicação automática em pagamento externo.</p>
+        <p className="rounded-2xl bg-amber-50 p-3 text-xs font-semibold text-amber-900">Como a compra termina no WhatsApp, o desconto é validado no registro do pedido e confirmado no atendimento; não há aplicação automática em pagamento externo.</p>
       </>)}
     </ActionForm>
   );

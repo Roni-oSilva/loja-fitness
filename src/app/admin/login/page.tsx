@@ -14,7 +14,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm sm:p-8">
         <p className="eyebrow">Painel administrativo</p>
         <h1 className="mt-1 font-display text-4xl font-extrabold uppercase">Entrar</h1>
-        {!publicEnv().configured && <p role="alert" className="mt-4 rounded-md bg-amber-50 p-3 text-sm font-semibold text-amber-900">Supabase não configurado: defina as variáveis de ambiente (ver README).</p>}
+        {!publicEnv().configured && <p role="alert" className="mt-4 rounded-2xl bg-amber-50 p-3 text-sm font-semibold text-amber-900">Supabase não configurado: defina as variáveis de ambiente (ver README).</p>}
         <LoginForm next={next} />
       </div>
     </main>

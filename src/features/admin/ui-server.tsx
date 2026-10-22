@@ -16,7 +16,7 @@ export const Panel = ({ title, children, className }: { title?: string; children
 );
 export const Th = ({ children, className }: { children?: React.ReactNode; className?: string }) => <th scope="col" className={cn("px-3 py-2 text-left text-xs font-bold uppercase tracking-wide text-neutral-600", className)}>{children}</th>;
 export const Td = ({ children, className }: { children?: React.ReactNode; className?: string }) => <td className={cn("px-3 py-2.5 align-top text-sm", className)}>{children}</td>;
-export const TableWrap = ({ children }: { children: React.ReactNode }) => <div className="overflow-x-auto rounded-xl border border-neutral-200 bg-white"><table className="w-full min-w-[40rem] divide-y divide-neutral-200">{children}</table></div>;
+export const TableWrap = ({ children }: { children: React.ReactNode }) => <div className="overflow-x-auto rounded-3xl border border-neutral-200 bg-white"><table className="w-full min-w-[40rem] divide-y divide-neutral-200">{children}</table></div>;
 export const NoRows = ({ cols, text }: { cols: number; text: string }) => <tr><td colSpan={cols} className="px-3 py-10 text-center text-sm text-neutral-600">{text}</td></tr>;
 
 const TONE: Record<OrderStatus, string> = {

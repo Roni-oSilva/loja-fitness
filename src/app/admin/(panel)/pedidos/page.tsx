@@ -33,7 +33,7 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
         <div><label htmlFor="ate" className="label">Até</label><input id="ate" name="ate" type="date" defaultValue={sp.ate} className="field" /></div>
         <div className="flex items-end gap-2"><button className="btn btn-dark btn-sm">Filtrar</button><Link href="/admin/pedidos" className="btn btn-outline btn-sm">Limpar</Link></div>
       </form>
-      {error && <p role="alert" className="mb-3 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar os pedidos.</p>}
+      {error && <p role="alert" className="mb-3 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-800">Não foi possível carregar os pedidos.</p>}
       <TableWrap>
         <thead className="bg-mist"><tr><Th>Pedido</Th><Th>Data</Th><Th>Cliente</Th><Th>Total</Th><Th>Status</Th><Th>Pagamento</Th></tr></thead>
         <tbody className="divide-y divide-neutral-100">

@@ -4,11 +4,11 @@ import type { Category, ProductWithRelations, StoreSettings } from "../types";
 import type { Json } from "../json";
 
 export const DEFAULT_SETTINGS: StoreSettings = {
-  store_name: "Minha Loja Fitness", tagline: null, logo_url: null, favicon_url: null,
-  theme_primary: "#FF5A1F", theme_accent: "#B8F531", theme_dark: "#111318", whatsapp_number: null,
+  store_name: "Ana Fitness", tagline: null, logo_url: "/brand/ana-fitness-logo.png", favicon_url: null,
+  theme_primary: "#A5C910", theme_accent: "#E4F58A", theme_dark: "#0B102D", whatsapp_number: null,
   contact_email: null, address: null, instagram_url: null, facebook_url: null, tiktok_url: null, youtube_url: null,
   promo_bar_enabled: false, promo_bar_text: null, promo_bar_link: null, free_shipping_threshold_cents: null,
-  delivery_info: null, returns_text: null, privacy_text: null, terms_text: null,
+  delivery_info: null, returns_text: null, management_text: null, privacy_text: null, terms_text: null,
   hero_title: "SEU PRÓXIMO NÍVEL COMEÇA AQUI.",
   hero_subtitle: "Roupas, acessórios e equipamentos para acompanhar cada treino, superar limites e transformar sua rotina.",
   hero_cta_label: "COMPRAR AGORA", hero_cta_link: "/produtos", hero_secondary_label: "EXPLORAR COLEÇÃO",

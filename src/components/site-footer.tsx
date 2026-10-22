@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MessageCircle, Mail } from "lucide-react";
+import { SafeImage } from "./safe-image";
 import type { StoreSettings } from "@/lib/types";
 
 export function SiteFooter({ s, whatsappLink, categories }: { s: StoreSettings; whatsappLink: string | null; categories: { name: string; slug: string }[] }) {
@@ -9,10 +10,10 @@ export function SiteFooter({ s, whatsappLink, categories }: { s: StoreSettings; 
   ].filter((x) => x.href);
   const col = "space-y-2 text-sm text-white/80 [&_a:hover]:text-white [&_a:hover]:underline";
   return (
-    <footer className="on-dark mt-20 bg-ink text-white">
+    <footer className="on-dark mt-20 rounded-t-[2.5rem] bg-ink text-white sm:rounded-t-[4rem]">
       <div className="container-x grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="font-display text-3xl font-extrabold uppercase">{s.store_name}</p>
+          {s.logo_url ? <span className="relative block size-32 overflow-hidden rounded-[2rem]"><SafeImage src={s.logo_url} alt={s.store_name} sizes="128px" className="object-cover" /></span> : <p className="font-display text-3xl font-extrabold">{s.store_name}</p>}
           {s.tagline && <p className="mt-3 max-w-xs text-sm text-white/80">{s.tagline}</p>}
           {social.length > 0 && (
             <ul className="mt-4 flex flex-wrap gap-2">
@@ -22,14 +23,15 @@ export function SiteFooter({ s, whatsappLink, categories }: { s: StoreSettings; 
             </ul>
           )}
         </div>
-        <nav aria-label="Loja"><h2 className="mb-3 font-display text-lg font-bold uppercase text-accent">Loja</h2>
+        <nav aria-label="Loja"><h2 className="mb-3 font-display text-lg font-bold text-brand">Loja</h2>
           <ul className={col}><li><Link href="/produtos">Todos os produtos</Link></li>
             {categories.slice(0, 6).map((c) => <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>)}</ul></nav>
-        <nav aria-label="Políticas"><h2 className="mb-3 font-display text-lg font-bold uppercase text-accent">Informações</h2>
+        <nav aria-label="Políticas"><h2 className="mb-3 font-display text-lg font-bold text-brand">Informações</h2>
           <ul className={col}>
-            <li><Link href="/trocas-e-devolucoes">Trocas e devoluções</Link></li><li><Link href="/politica-de-privacidade">Política de privacidade</Link></li>
+            <li><Link href="/trocas-e-devolucoes">Trocas e devoluções</Link></li><li><Link href="/politica-de-gestao">Política de gestão</Link></li>
+            <li><Link href="/politica-de-privacidade">Política de privacidade</Link></li>
             <li><Link href="/termos-de-uso">Termos de uso</Link></li><li><Link href="/contato">Contato</Link></li></ul></nav>
-        <div><h2 className="mb-3 font-display text-lg font-bold uppercase text-accent">Atendimento</h2>
+        <div><h2 className="mb-3 font-display text-lg font-bold text-brand">Atendimento</h2>
           <ul className={col}>
             {whatsappLink && <li><a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2"><MessageCircle className="size-4" aria-hidden />WhatsApp</a></li>}
             {s.contact_email && <li><a href={`mailto:${s.contact_email}`} className="inline-flex items-center gap-2"><Mail className="size-4" aria-hidden />{s.contact_email}</a></li>}

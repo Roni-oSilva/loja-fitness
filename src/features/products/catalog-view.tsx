@@ -47,7 +47,7 @@ export async function CatalogView({ sp, basePath, fixedCategory, title, subtitle
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[16rem_1fr]">
         <form method="get" action={basePath} className="lg:sticky lg:top-24 lg:self-start" aria-label="Filtros">
-          <details className="group rounded-xl border border-neutral-200 lg:border-0 lg:open:block" open={hasFilters ? true : undefined}>
+          <details className="group rounded-3xl border border-neutral-200 lg:border-0 lg:open:block" open={hasFilters ? true : undefined}>
             <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between px-4 font-display text-xl font-bold uppercase lg:hidden">Filtros {hasFilters && <span className="size-2 rounded-full bg-brand" aria-label="ativos" />}</summary>
             <div className="space-y-6 p-4 lg:p-0">
               {params.q && <input type="hidden" name="q" value={params.q} />}
