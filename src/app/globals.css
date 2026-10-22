@@ -3,6 +3,8 @@
 @import "@fontsource/barlow-condensed/600.css";
 @import "@fontsource/barlow-condensed/700.css";
 @import "@fontsource/barlow-condensed/800.css";
+@import "@fontsource/courier-prime/400.css";
+@import "@fontsource/courier-prime/700.css";
 
 /* Tokens de tema: sobrescritos em runtime pelas configurações da loja (layout). */
 :root {
@@ -53,3 +55,19 @@ h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: 0.
 .rise { animation: rise 0.5s ease-out both; }
 @keyframes pulse-bg { 50% { opacity: 0.5; } }
 .skeleton { background: #e5e7eb; border-radius: 0.5rem; animation: pulse-bg 1.4s ease-in-out infinite; }
+
+/* Recibo (papel térmico) */
+.receipt { font-family: "Courier Prime", "Courier New", monospace; color: #2b2b2b;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255,255,255,.9), transparent 55%),
+    radial-gradient(ellipse at 80% 60%, rgba(0,0,0,.035), transparent 60%),
+    repeating-linear-gradient(115deg, rgba(0,0,0,.018) 0 2px, transparent 2px 9px), #f4f4f6;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12); }
+.receipt-edge { height: 10px; background: linear-gradient(135deg, transparent 50%, #f4f4f6 50%) 0 0/14px 10px, linear-gradient(225deg, transparent 50%, #f4f4f6 50%) 0 0/14px 10px; }
+.receipt .dash { border-top: 1px dashed #555; }
+@media print {
+  body * { visibility: hidden !important; }
+  .print-area, .print-area * { visibility: visible !important; }
+  .print-area { position: absolute; inset: 0 auto auto 0; width: 100%; box-shadow: none !important; }
+  @page { margin: 8mm; }
+}

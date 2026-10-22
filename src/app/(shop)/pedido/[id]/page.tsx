@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { getOrderForAccess } from "@/lib/services/orders";
 import { ORDER_STATUS_LABEL } from "@/lib/order-status";
-import { formatBRL } from "@/lib/money";
+import { Receipt } from "@/components/receipt";
+import { PrintButton } from "@/features/orders/print-button";
 import { OpenWhatsApp } from "@/features/orders/open-whatsapp";
 import { rateLimit } from "@/lib/rate-limit";
 import { headers } from "next/headers";
@@ -24,17 +25,11 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
       <h1 className="h-section mt-2">Pedido {o.orderNumber}</h1>
       <p className="mt-2 text-neutral-700">Situação: <strong>{ORDER_STATUS_LABEL[o.status]}</strong>. Seu pedido <strong>ainda não está pago nem confirmado</strong>: ele só segue após conversarmos pelo WhatsApp para confirmar disponibilidade, frete e pagamento.</p>
       <OpenWhatsApp link={o.whatsappLink} auto={abrir === "1"} orderId={o.id} />
-      <section className="card mt-8 p-5" aria-label="Itens do pedido">
-        <ul className="divide-y divide-neutral-200">
-          {o.items.map((i, k) => <li key={k} className="flex justify-between gap-4 py-3 text-sm"><span>{i.quantity}× {i.name}{(i.size || i.color) && <span className="text-neutral-600"> ({[i.size && `Tam ${i.size}`, i.color].filter(Boolean).join(", ")})</span>}</span><span className="font-semibold">{formatBRL(i.lineTotalCents)}</span></li>)}
-        </ul>
-        <dl className="mt-3 space-y-1 border-t border-neutral-200 pt-3 text-sm">
-          <div className="flex justify-between"><dt>Subtotal</dt><dd>{formatBRL(o.subtotalCents)}</dd></div>
-          {o.discountCents > 0 && <div className="flex justify-between"><dt>Desconto{o.couponCode ? ` (${o.couponCode})` : ""}</dt><dd>− {formatBRL(o.discountCents)}</dd></div>}
-          <div className="flex justify-between"><dt>Frete</dt><dd>{o.shippingCents == null ? "A confirmar" : o.shippingCents === 0 ? "Grátis" : formatBRL(o.shippingCents)}</dd></div>
-          <div className="flex justify-between text-lg font-extrabold"><dt>Total estimado</dt><dd>{formatBRL(o.totalCents)}</dd></div>
-        </dl>
-      </section>
+      <div className="mt-10">
+        <Receipt d={{ storeName: o.storeName, logoUrl: o.logoUrl, orderNumber: o.orderNumber, createdAt: o.createdAt, status: o.status, customerName: o.customerName, items: o.items,
+          subtotalCents: o.subtotalCents, discountCents: o.discountCents, couponCode: o.couponCode, shippingCents: o.shippingCents, totalCents: o.totalCents, paymentReceivedAt: o.paymentReceivedAt }} />
+        <div className="mt-5 flex justify-center"><PrintButton /></div>
+      </div>
       <p className="mt-4 text-xs text-neutral-600">Guarde esta página: o endereço contém seu acesso privado ao pedido. Não o compartilhe.</p>
     </div>
   );

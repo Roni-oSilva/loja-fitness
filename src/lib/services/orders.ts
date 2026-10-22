@@ -108,7 +108,7 @@ export interface OrderView {
   id: string; orderNumber: string; status: OrderStatus; createdAt: string; customerName: string | null;
   items: { name: string; size: string | null; color: string | null; quantity: number; unitPriceCents: number; lineTotalCents: number }[];
   subtotalCents: number; discountCents: number; shippingCents: number | null; totalCents: number; couponCode: string | null;
-  whatsappLink: string | null;
+  whatsappLink: string | null; paymentReceivedAt: string | null; storeName: string; logoUrl: string | null;
 }
 
 /** Acesso ao pedido exige o token aleatório (comparação em tempo constante). Qualquer falha devolve null (sem distinguir causas). */
@@ -124,7 +124,8 @@ export async function getOrderForAccess(id: string, token: string | undefined): 
   const view: OrderView = {
     id: o.id, orderNumber: o.order_number, status: o.status, createdAt: o.created_at, customerName: o.customers?.name ?? null, items,
     subtotalCents: o.subtotal_cents, discountCents: o.discount_total_cents, shippingCents: o.shipping_cents, totalCents: o.grand_total_cents,
-    couponCode: o.coupon_code_snapshot, whatsappLink: null,
+    couponCode: o.coupon_code_snapshot, whatsappLink: null, paymentReceivedAt: o.payment_received_at ?? null,
+    storeName: settings.store_name, logoUrl: settings.logo_url,
   };
   if (settings.whatsapp_number) {
     view.whatsappLink = buildWhatsAppLink(settings.whatsapp_number, buildOrderMessage({
