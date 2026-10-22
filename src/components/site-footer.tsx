@@ -25,6 +25,7 @@ export function SiteFooter({ s, whatsappLink, categories }: { s: StoreSettings; 
         </div>
         <nav aria-label="Loja"><h2 className="mb-3 font-display text-lg font-bold text-brand">Loja</h2>
           <ul className={col}><li><Link href="/produtos">Todos os produtos</Link></li>
+            <li><Link href="/meus-pedidos">Meus pedidos</Link></li>
             {categories.slice(0, 6).map((c) => <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>)}</ul></nav>
         <nav aria-label="Políticas"><h2 className="mb-3 font-display text-lg font-bold text-brand">Informações</h2>
           <ul className={col}>

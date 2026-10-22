@@ -141,3 +141,10 @@ describe("código de barras do recibo (Code 39)", () => {
     expect(code39("A*B")).toBeNull();
   });
 });
+
+describe("mensagem do WhatsApp com recibo", () => {
+  it("inclui o link privado do recibo quando informado", () => {
+    const m = buildOrderMessage({ storeName: "Loja", orderNumber: "LF-1", items: [{ name: "X", quantity: 1, unitPriceCents: 100 }], subtotalCents: 100, discountCents: 0, shippingCents: null, totalCents: 100, receiptUrl: "https://loja.com/pedido/abc?t=tok" });
+    expect(m).toContain("Recibo do pedido (link privado): https://loja.com/pedido/abc?t=tok");
+  });
+});

@@ -5,6 +5,7 @@ import { createPublicClient } from "../supabase/public";
 import { applyCoupon, availableStock, COUPON_ERROR_MESSAGES, computeTotals, effectivePriceCents, type PricedLine, type Totals } from "../pricing";
 import { buildOrderMessage, buildWhatsAppLink } from "../whatsapp";
 import { getStoreSettings } from "./catalog";
+import { siteUrl } from "../utils";
 import type { CartItemInput } from "../validations/checkout";
 import type { Coupon, OrderStatus } from "../types";
 
@@ -137,6 +138,7 @@ export async function getOrderForAccess(id: string, token: string | undefined): 
     view.whatsappLink = buildWhatsAppLink(settings.whatsapp_number, buildOrderMessage({
       storeName: settings.store_name, orderNumber: o.order_number, items, subtotalCents: o.subtotal_cents, discountCents: o.discount_total_cents,
       shippingCents: o.shipping_cents, totalCents: o.grand_total_cents, customerName: view.customerName, couponCode: o.coupon_code_snapshot, notes: o.customer_notes,
+      receiptUrl: `${siteUrl()}/pedido/${o.id}?t=${encodeURIComponent(token)}`,
     }));
   }
   return view;

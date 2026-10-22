@@ -120,7 +120,7 @@ function waText(o) {
   const lines = o.items.map((i) => `• ${i.qty}x ${i.name}${i.size || i.color ? ` (${[i.size && "Tam " + i.size, i.color].filter(Boolean).join(", ")})` : ""} — ${brl(i.unit * i.qty)}`);
   const out = [`Olá! Gostaria de finalizar meu pedido na ${S.settings.name}.`, `Pedido: ${o.number}`, "Produtos:", ...lines, `Subtotal: ${brl(o.subtotal)}`];
   if (o.discount) out.push(`Descontos: ${brl(o.discount)} (cupom ${o.coupon})`);
-  out.push(`Frete: ${o.shipping == null ? "a confirmar" : o.shipping === 0 ? "grátis" : brl(o.shipping)}`, `Total estimado: ${brl(o.total)}${o.shipping == null ? " (sem frete)" : ""}`, `Nome: ${o.name}`, "Gostaria de confirmar a disponibilidade, o frete e as condições de pagamento.");
+  out.push(`Frete: ${o.shipping == null ? "a confirmar" : o.shipping === 0 ? "grátis" : brl(o.shipping)}`, `Total estimado: ${brl(o.total)}${o.shipping == null ? " (sem frete)" : ""}`, `Nome: ${o.name}`, "Gostaria de confirmar a disponibilidade, o frete e as condições de pagamento.", `Recibo do pedido (link privado): ${location.origin === "null" ? "(link do site)" : location.origin}/pedido/${o.id}`);
   return out.join("\n");
 }
 
@@ -136,6 +136,7 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeMod
 
 /* ===== LOJA ===== */
 function promoBar() { return S.settings.promoOn && S.settings.promoText ? `<div class="promo">${esc(S.settings.promoText)}</div>` : ""; }
+const backBtn = (fb = "produtos", label = "← Voltar") => `<button class="back" data-a="back" data-fb="${fb}">${label}</button>`;
 function header() {
   const count = S.cart.reduce((s, l) => s + l.qty, 0);
   return `${promoBar()}<header class="hdr dark"><div class="in">
@@ -147,7 +148,7 @@ function header() {
 function footer() {
   return `<footer class="foot dark"><div class="wrap fg">
     <div><img src="${LOGO}" alt="${esc(S.settings.name)}" width="120" height="120" style="border-radius:32px"><p class="small" style="opacity:.75;max-width:260px;margin-top:12px">Roupas, acessórios e equipamentos para o seu treino.</p></div>
-    <div><h4>Loja</h4><a href="#/produtos">Todos os produtos</a>${CATS.slice(2, 6).map(([s, n]) => `<a data-a="cat" data-c="${s}" href="#/produtos">${n}</a>`).join("")}</div>
+    <div><h4>Loja</h4><a href="#/produtos">Todos os produtos</a><a href="#/meus-pedidos">Meus pedidos</a>${CATS.slice(2, 6).map(([s, n]) => `<a data-a="cat" data-c="${s}" href="#/produtos">${n}</a>`).join("")}</div>
     <div><h4>Informações</h4><a data-a="policy" data-p="trocas">Trocas e devoluções</a><a data-a="policy" data-p="gestao">Política de gestão</a><a data-a="policy" data-p="privacidade">Política de privacidade</a><a data-a="policy" data-p="termos">Termos de uso</a></div>
     <div><h4>Atendimento</h4><a data-a="policy" data-p="contato">WhatsApp e contato</a><p class="small" style="opacity:.6">Os dados comerciais (endereço, e-mail, redes) são preenchidos pela loja no painel.</p></div>
   </div><div class="wrap small" style="text-align:center;opacity:.55;margin-top:32px">© ${new Date().getFullYear()} ${esc(S.settings.name)} — demonstração</div></footer>`;
@@ -181,13 +182,14 @@ function home() {
     <div><span class="eyebrow rise" style="color:var(--ink)">✦ ${esc(S.settings.name)}</span><h1 id="ht" aria-label="Seu próximo nível começa aqui.">${"Seu próximo nível começa aqui.".split(" ").map((w, i, arr) => `<span class="word ${i === arr.length - 1 ? "shimmer" : ""}" aria-hidden="true" style="--w:${i}">${w}${i < arr.length - 1 ? "&nbsp;" : ""}</span>`).join("")}</h1>
     <p class="sub rise" style="--i:2">Roupas, acessórios e equipamentos para acompanhar cada treino, superar limites e transformar sua rotina.</p>
     <div class="cta rise" style="--i:3"><a class="btn p lg ring" href="#/produtos">COMPRAR AGORA →</a><a class="btn g lg" href="#/produtos" data-a="sort" data-s="novidades">EXPLORAR COLEÇÃO</a></div></div>
-    <div class="brandcard float tilt" id="tiltcard" aria-hidden="true">${mark("spin", 170)}<span class="chip" style="left:-24px;top:36px;background:var(--brand);color:var(--ink)">Treino ✦ Rotina</span><span class="chip" style="right:-24px;bottom:44px;background:#fff;color:var(--ink)">Compra pelo WhatsApp</span></div>
+    <div class="collage" id="tiltcard" aria-hidden="true">${show.slice(0, 3).map((p, i) => `<div class="polaroid ${i % 2 ? "float" : "float"}" style="${["left:6px;top:0;transform:rotate(-6deg)", "right:0;top:60px;transform:rotate(6deg)", "left:110px;bottom:0;transform:rotate(-2deg)"][i]};animation-duration:${7 + i * 2}px"><div class="ph"><img src="${IMG[p.img]}" alt=""></div><span class="pr">${brl(price(p))}</span></div>`).join("")}<span class="chip" style="right:40px;top:0;background:#fff;color:var(--ink)">Compra pelo WhatsApp</span><span class="float" style="position:absolute;right:-6px;bottom:14px">${mark("spin", 80)}</span></div>
   </div></section>
   <div class="marq dark" aria-hidden="true"><div class="t">${[0, 1].map(() => `<span class="i">${Array.from({ length: 6 }, (_, i) => `<span style="${i % 2 ? "color:var(--brand)" : "-webkit-text-stroke:2px #fff;color:transparent"}">${esc(S.settings.name)}</span>${mark("", 52)}`).join("")}</span>`).join("")}</div></div>
   <section class="s wrap"><div class="sh rv"><div><span class="eyebrow">Navegue</span><h2 class="h2">Escolha seu treino</h2></div><a class="btn o s" href="#/produtos" style="display:inline-flex">Ver todos →</a></div>
-  <ul class="cats">${cats.map(([s, n, c], i) => `<li class="rv" style="--i:${i % 4}"><a class="cat dark" href="#/produtos" data-a="cat" data-c="${s}">${mark("mk", 150)}<span class="arrow">↗</span><b>${n}</b><small>${c} ${c > 1 ? "produtos" : "produto"}</small></a></li>`).join("")}</ul></section>
+  <ul class="cats">${cats.map(([s, n, c], i) => { const ic = { "roupas-masculinas": "👕", "roupas-femininas": "✨", "camisetas-e-regatas": "👕", "leggings-e-shorts": "🩳", "tenis-esportivos": "👟", "luvas-e-munhequeiras": "🧤", "garrafas-e-acessorios": "🥤", "equipamentos-de-treino": "🏋" }[s] || "⚡"; return `<li class="rv" style="--i:${i % 4}"><a class="cat dark ${["", "t1", "t2", "t3"][i % 4]}" href="#/produtos" data-a="cat" data-c="${s}"><span class="bg" aria-hidden="true">${ic}</span><span class="ci2" aria-hidden="true">${ic}</span><span class="arrow">↗</span><b>${n}</b><small>${c} ${c > 1 ? "produtos" : "produto"}</small></a></li>`; }).join("")}</ul></section>
   <section class="s wrap"><div class="sh rv"><div><span class="eyebrow">${feat.length ? "Seleção da loja" : "Recém-chegados"}</span><h2 class="h2">${feat.length ? "Em destaque" : "Novidades"}</h2></div><a class="btn o s" href="#/produtos">Ver tudo →</a></div>
   ${show.length ? `<div class="grid">${show.map(card).join("")}</div>` : `<div class="empty"><h3 class="h2" style="font-size:30px">Em breve, novos produtos</h3></div>`}</section>
+  <section class="s wrap"><div class="sh rv"><div><span class="eyebrow">Passo a passo</span><h2 class="h2">Como comprar</h2></div></div><ol class="steps" style="padding:0;margin:0;list-style:none">${[["🛍", "Escolha", "Navegue, escolha tamanho e cor e monte o seu carrinho."], ["✆", "Finalize no WhatsApp", "Registramos o pedido e abrimos a conversa com tudo preenchido."], ["🧾", "Receba o recibo", "Você guarda o recibo do pedido e combina frete e pagamento."], ["📦", "Combine a entrega", "Confirmamos disponibilidade e acertamos os detalhes com você."]].map((s, i) => `<li class="step rv lift" style="--i:${i}"><span class="ic2"><span aria-hidden="true">${s[0]}</span><span class="n">${i + 1}</span></span><h3 style="font-size:20px;margin-top:20px">${s[1]}</h3><p class="small muted" style="margin:6px 0 0">${s[2]}</p></li>`).join("")}</ol></section>
   ${ban ? `<section class="s wrap rv"><div class="banner"><div style="position:absolute;right:-30px;top:-30px;opacity:.25;z-index:-1" class="float">${mark("", 300)}</div><div style="max-width:560px"><h2 class="h2">${esc(ban.title)}</h2><p style="font-size:18px;margin:14px 0 0">${esc(ban.sub)}</p>${ban.btn ? `<a class="btn k lg" href="#/produtos" style="margin-top:26px">${esc(ban.btn)} →</a>` : ""}</div></div></section>` : ""}
   <section class="s"><div class="bubble"><div class="bgrid">${[["✔", "Compra simples", "Escolha os produtos e finalize em poucos toques."], ["✆", "Atendimento pelo WhatsApp", "Confirmamos disponibilidade, frete e pagamento com você."], ["♡", "Trocas e devoluções", "Consulte a política da loja antes de comprar."], ["✦", "Transparência", "Valores conferidos pelo sistema no pedido."]].map((b, i) => `<div class="rv lift" style="--i:${i}"><span class="ico">${b[0]}</span><h3 style="font-size:20px;margin-top:18px">${b[1]}</h3><p class="small muted" style="margin:6px 0 0">${b[2]}</p></div>`).join("")}</div></div></section>
   <section class="s wrap edit2">${[["VISTA SUA EVOLUÇÃO.", "Peças pensadas para acompanhar o seu treino.", "background:var(--ink);color:#fff"], ["EQUIPAMENTO CERTO. FOCO TOTAL.", "Acessórios e equipamentos para a sua rotina.", "background:var(--brand);color:var(--ink)"]].map((b, i) => `<a href="#/produtos" class="eb lift rv dark" style="${b[2]};text-decoration:none;--i:${i}"><div style="position:absolute;right:-30px;top:-30px;opacity:.28;z-index:-1" class="${i ? "" : "float"}">${mark("", 240)}</div><h2 class="h2">${b[0]}</h2><p style="max-width:380px;opacity:.85">${b[1]}</p><span class="btn w s" style="width:fit-content;margin-top:10px">Ver mais →</span></a>`).join("")}</section>
@@ -230,7 +232,7 @@ function product(slug) {
   const needs = (sz.length && !sel.size) || (cl.length && !sel.color);
   const any = stockOf(p) > 0, rel = S.products.filter((x) => x.published && x.id !== p.id && x.cat === p.cat).slice(0, 4);
   const pr = v?.price ?? price(p);
-  return `${header()}<div class="wrap" style="padding-top:28px"><p class="small muted"><a href="#/">Início</a> / <a href="#/produtos" data-a="cat" data-c="${p.cat}">${CATS.find((c) => c[0] === p.cat)[1]}</a> / ${esc(p.name)}</p>
+  return `${header()}<div class="wrap" style="padding-top:28px"><div style="margin-bottom:14px">${backBtn("produtos")}</div><p class="small muted"><a href="#/">Início</a> / <a href="#/produtos" data-a="cat" data-c="${p.cat}">${CATS.find((c) => c[0] === p.cat)[1]}</a> / ${esc(p.name)}</p>
   <div class="pd"><div class="big"><img src="${IMG[p.img]}" alt="${esc(p.name)} (imagem demonstrativa)"></div>
   <div><span class="tag" style="background:#e5e7eb">Produto de demonstração</span>${p.badge ? ` <span class="tag">${esc(p.badge)}</span>` : ""}<h1 class="h2" style="font-size:clamp(34px,5vw,52px);margin-top:10px">${esc(p.name)}</h1>
   <p style="margin:14px 0 0"><span class="price" style="font-size:32px">${brl(pr)}</span>${saleOn(p) ? `<span class="old" style="font-size:18px">${brl(p.price)}</span>` : ""}</p>
@@ -244,14 +246,18 @@ function product(slug) {
   <section style="margin-top:28px;border-top:1px solid var(--line);padding-top:18px"><h2 style="font-size:22px">Descrição</h2><p class="muted">${esc(p.desc)}</p></section>
   <details style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px"><summary style="font:700 20px Outfit;cursor:pointer">Tabela de medidas</summary><p class="muted">Medidas de exemplo — a loja cadastra as medidas reais do fabricante.</p></details>
   <details style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px"><summary style="font:700 20px Outfit;cursor:pointer">Conservação</summary><p class="muted">Lavar à mão ou à máquina em ciclo delicado. Não usar alvejante.</p></details>
-  <p class="small muted" style="margin-top:18px">A compra é finalizada pelo WhatsApp, onde confirmamos disponibilidade, frete e pagamento.</p></div></div>
+  <ul class="trust" style="padding:0"><li>✆ Atendimento pelo WhatsApp</li><li>✔ Valores conferidos no pedido</li><li>🧾 Recibo do seu pedido</li></ul><p class="small muted" style="margin-top:18px">A compra é finalizada pelo WhatsApp, onde confirmamos disponibilidade, frete e pagamento.</p></div></div>
   ${rel.length ? `<section class="s"><h2 class="h2" style="font-size:36px;margin-bottom:24px">Você também pode gostar</h2><div class="grid">${rel.map(card).join("")}</div></section>` : ""}</div>${footer()}`;
+}
+function myOrders() {
+  const l = [...S.orders].filter((o) => o.mine).sort((x, y) => y.created.localeCompare(x.created));
+  return `${header()}<div class="wrap" style="max-width:760px;padding-top:34px"><h1 class="h2">Meus pedidos</h1><p class="muted">Os pedidos feitos neste aparelho ficam aqui, com o recibo de cada um.</p><div style="margin-top:24px;display:grid;gap:12px">${l.length ? l.map((o) => `<a href="#/pedido/${o.id}" class="lift card" style="display:flex;align-items:center;gap:16px;padding:16px;text-decoration:none"><span style="width:48px;height:48px;border-radius:16px;background:var(--ink);color:var(--brand);display:grid;place-items:center;font-size:24px">🧾</span><span style="flex:1"><b class="d" style="font-size:18px">${o.number}</b><br><small class="muted">${dtf(o.created)} · ${STATUS[o.status]}</small></span><span class="btn o s">Ver recibo</span></a>`).join("") : `<div class="empty"><h3 class="h2" style="font-size:28px">Nenhum pedido neste aparelho</h3><p class="muted">Quando você finalizar um pedido, o recibo ficará guardado aqui.</p><a class="btn k" href="#/produtos" style="margin-top:12px">Ver produtos</a></div>`}</div></div>${footer()}`;
 }
 function favorites() { const l = S.products.filter((p) => S.favs.includes(p.id) && p.published); return `${header()}<div class="wrap" style="padding-top:34px"><h1 class="h2" style="margin-bottom:26px">Favoritos</h1>${l.length ? `<div class="grid">${l.map(card).join("")}</div>` : `<div class="empty"><h3 class="h2" style="font-size:28px">Nenhum favorito ainda</h3><p class="muted">Toque no coração de um produto para salvá-lo aqui.</p><a class="btn k" href="#/produtos" style="margin-top:12px">Ver produtos</a></div>`}</div>${footer()}`; }
 function cart() {
   if (!S.cart.length) return `${header()}<div class="wrap" style="padding-top:34px"><h1 class="h2" style="margin-bottom:26px">Carrinho</h1><div class="empty"><h3 class="h2" style="font-size:28px">Seu carrinho está vazio</h3><p class="muted">Escolha seus produtos e finalize pelo WhatsApp.</p><a class="btn k" href="#/produtos" style="margin-top:12px">Ver produtos</a></div></div>${footer()}`;
   const q = quote(), c = S.ui.checkout || (S.ui.checkout = { name: "", phone: "", notes: "", consent: false, errs: {} });
-  return `${header()}<div class="wrap" style="padding-top:34px"><div style="display:flex;justify-content:space-between;align-items:flex-end"><h1 class="h2">Carrinho</h1><button class="btn o s" data-a="clearcart">Esvaziar</button></div>
+  return `${header()}<div class="wrap" style="padding-top:34px"><div style="margin-bottom:14px">${backBtn("produtos", "← Continuar comprando")}</div><div style="display:flex;justify-content:space-between;align-items:flex-end"><h1 class="h2">Carrinho</h1><button class="btn o s" data-a="clearcart">Esvaziar</button></div>
   <div class="cartg"><div>${q.lines.map((l) => `<div class="ci"><a class="t" href="#/produto/${l.slug || ""}">${l.img ? `<img src="${IMG[l.img]}" alt="">` : ""}</a><div style="flex:1;min-width:0"><a href="#/produto/${l.slug || ""}" style="font-weight:700;text-decoration:none">${esc(l.name)}</a><div class="small muted">${[l.size && "Tam " + l.size, l.color].filter(Boolean).join(" · ")}</div>${l.problem ? `<p class="small" role="alert" style="color:#b91c1c;font-weight:700;margin:4px 0">⚠ ${l.problem}</p>` : ""}
     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px"><div class="qty"><button data-a="cqty" data-v="${l.vid}" data-d="-1" ${l.qty <= 1 ? "disabled" : ""} aria-label="Diminuir">−</button><output>${l.qty}</output><button data-a="cqty" data-v="${l.vid}" data-d="1" ${l.stock != null && l.qty >= l.stock ? "disabled" : ""} aria-label="Aumentar">+</button></div><b>${brl(l.unit * l.qty)}</b><button class="btn s o" data-a="crm" data-v="${l.vid}" aria-label="Remover ${esc(l.name)}">Remover</button></div></div></div>`).join("")}</div>
   <aside class="card sum" aria-label="Resumo"><h2 style="font-size:26px">Resumo</h2>
@@ -281,7 +287,7 @@ function orderPage(id) {
   const o = S.orders.find((x) => x.id === id);
   if (!o) return `${header()}<div class="wrap" style="padding:80px 0;text-align:center"><h1 class="h2">Pedido não encontrado</h1></div>${footer()}`;
   const link = waLink(o);
-  return `${header()}<div class="wrap" style="max-width:760px;padding-top:38px"><p style="color:#166534;font-weight:800">✔ Pedido registrado</p><h1 class="h2" style="margin-top:4px">Pedido ${o.number}</h1>
+  return `${header()}<div class="wrap" style="max-width:760px;padding-top:38px"><div style="margin-bottom:14px">${backBtn("produtos", "← Continuar comprando")}</div><p style="color:#166534;font-weight:800">✔ Pedido registrado</p><h1 class="h2" style="margin-top:4px">Pedido ${o.number}</h1>
   <p class="muted">Situação: <b>${STATUS[o.status]}</b>. Seu pedido <b>ainda não está pago nem confirmado</b>: ele só segue após conversarmos pelo WhatsApp para confirmar disponibilidade, frete e pagamento.</p>
   <div class="dark" style="background:var(--ink);color:#fff;border-radius:32px;padding:24px;margin:22px 0">${link ? `<p style="margin:0 0 12px;font-weight:700">Continue a conversa com a loja:</p><a class="btn p lg" href="${link}" target="_blank" rel="noopener">✆ Abrir WhatsApp com meu pedido</a><p class="small" style="opacity:.8;margin:12px 0 0">A mensagem já vai preenchida. Se nada abrir, toque no botão acima — o pedido já está salvo.</p>`
     : `<p style="margin:0 0 10px;font-weight:700">O WhatsApp da loja ainda não foi configurado.</p><p class="small" style="opacity:.85">Na demonstração: abra <b>Painel admin → Configurações</b> e informe o número (com DDI e DDD). Esta é a mensagem que seria enviada:</p><pre style="white-space:pre-wrap;background:rgba(255,255,255,.08);border-radius:16px;padding:14px;font:13px Inter;margin:10px 0 0">${esc(waText(o))}</pre>`}</div>
@@ -396,6 +402,7 @@ function render() {
   } else if (r[0] === "produtos") html = catalog();
   else if (r[0] === "produto") html = product(r[1]);
   else if (r[0] === "favoritos") html = favorites();
+  else if (r[0] === "meus-pedidos") html = myOrders();
   else if (r[0] === "carrinho") html = cart();
   else if (r[0] === "pedido") html = orderPage(r[1]);
   else html = home();
@@ -416,7 +423,7 @@ function render() {
   if (S.ui.keepScroll) { scrollTo(0, y); S.ui.keepScroll = false; }
 }
 const rerender = () => { S.ui.keepScroll = true; render(); };
-window.addEventListener("hashchange", () => { closeModal(); $(".drawer")?.remove(); S.ui.sel = S.ui.sel; render(); scrollTo(0, 0); });
+window.addEventListener("hashchange", () => { S.ui.navd = true; closeModal(); $(".drawer")?.remove(); S.ui.sel = S.ui.sel; render(); scrollTo(0, 0); });
 
 function confetti() {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -430,9 +437,10 @@ document.addEventListener("click", (ev) => {
   const a = el.dataset.a, d = el.dataset;
   if (a !== "cat" && a !== "sort" && a !== "policy" && el.tagName === "A" && a !== "menu") { /* links normais seguem */ }
   switch (a) {
+    case "back": if (history.length > 1 && S.ui.navd) history.back(); else go(d.fb); break;
     case "mode": go(d.m === "admin" ? "admin" : ""); break;
     case "reset": if (confirm("Reiniciar a demonstração e voltar aos dados iniciais?")) { localStorage.removeItem(KEY); S = seed(); save(); go(""); render(); toast("Demonstração reiniciada"); } break;
-    case "menu": { const m = document.createElement("div"); m.className = "drawer dark"; m.setAttribute("role", "dialog"); m.setAttribute("aria-modal", "true"); m.innerHTML = `<div class="bg" data-a="closemenu"></div><div class="pn"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="d" style="font-size:22px;font-weight:800;display:flex;gap:8px;align-items:center">${mark("", 30)}${esc(S.settings.name)}</span><button class="ic" data-a="closemenu" aria-label="Fechar menu" style="background:rgba(255,255,255,.1)">✕</button></div><a href="#/produtos">Todos os produtos</a>${CATS.slice(2, 7).map(([s, n]) => `<a href="#/produtos" data-a="cat" data-c="${s}">${n}</a>`).join("")}<a href="#/favoritos">Favoritos</a><a href="#/carrinho">Carrinho</a></div>`; document.body.appendChild(m); break; }
+    case "menu": { const m = document.createElement("div"); m.className = "drawer dark"; m.setAttribute("role", "dialog"); m.setAttribute("aria-modal", "true"); m.innerHTML = `<div class="bg" data-a="closemenu"></div><div class="pn"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="d" style="font-size:22px;font-weight:800;display:flex;gap:8px;align-items:center">${mark("", 30)}${esc(S.settings.name)}</span><button class="ic" data-a="closemenu" aria-label="Fechar menu" style="background:rgba(255,255,255,.1)">✕</button></div><a href="#/produtos">Todos os produtos</a><a href="#/meus-pedidos">Meus pedidos</a>${CATS.slice(2, 7).map(([s, n]) => `<a href="#/produtos" data-a="cat" data-c="${s}">${n}</a>`).join("")}<a href="#/favoritos">Favoritos</a><a href="#/carrinho">Carrinho</a></div>`; document.body.appendChild(m); break; }
     case "closemenu": $(".drawer")?.remove(); break;
     case "search": { const q = prompt("Buscar produtos:"); if (q != null) { S.ui.f = { q, cat: "", sizes: [], colors: [], min: "", max: "", stock: false, sort: "novidades" }; save(); location.hash = "#/produtos"; if (route()[0] === "produtos") render(); } break; }
     case "cat": $(".drawer")?.remove(); S.ui.f = { q: "", cat: d.c, sizes: [], colors: [], min: "", max: "", stock: false, sort: "novidades" }; save(); if (route()[0] === "produtos") { render(); scrollTo(0, 0); } break;
@@ -494,7 +502,7 @@ document.addEventListener("submit", (e) => {
     if (Object.keys(c.errs).length || q.blocked || !q.lines.length) { rerender(); return; }
     ordering = true;
     const lines = q.lines.filter((l) => !l.problem);
-    const o = { id: uid() + uid(), number: "LF-" + uid().toUpperCase().slice(0, 8), name: c.name, phone: c.phone.replace(/\D/g, ""), items: lines.map((l) => ({ pid: l.pid, vid: l.vid, name: l.name, size: l.size, color: l.color, qty: l.qty, unit: l.unit })), subtotal: q.sub, discount: q.discount, coupon: q.coupon, shipping: q.ship, total: q.total, status: "pending_contact", committed: false, paid: null, created: new Date().toISOString(), history: [{ from: null, to: "pending_contact", at: new Date().toISOString(), note: "Pedido registrado pelo site" }] };
+    const o = { id: uid() + uid(), number: "LF-" + uid().toUpperCase().slice(0, 8), name: c.name, phone: c.phone.replace(/\D/g, ""), items: lines.map((l) => ({ pid: l.pid, vid: l.vid, name: l.name, size: l.size, color: l.color, qty: l.qty, unit: l.unit })), subtotal: q.sub, discount: q.discount, coupon: q.coupon, shipping: q.ship, total: q.total, status: "pending_contact", committed: false, paid: null, mine: true, created: new Date().toISOString(), history: [{ from: null, to: "pending_contact", at: new Date().toISOString(), note: "Pedido registrado pelo site" }] };
     if (q.coupon) S.coupons.find((x) => x.code === q.coupon).used++;
     S.orders.push(o); S.cart = []; S.ui.checkout = null; S.ui.coupon = ""; save(); ordering = false;
     S.ui.confetti = true; go("pedido/" + o.id); toast("Pedido registrado!");

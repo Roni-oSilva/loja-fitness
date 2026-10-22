@@ -25,7 +25,7 @@ export function SiteHeader({ storeName, categories, whatsappLink }: Props) {
   }, [open]);
 
   const nav = [{ href: "/produtos", label: "Produtos" }, ...categories.slice(0, 2).map((c) => ({ href: `/categoria/${c.slug}`, label: c.name }))];
-  const all = [{ href: "/produtos", label: "Todos os produtos" }, ...categories.map((c) => ({ href: `/categoria/${c.slug}`, label: c.name })), { href: "/favoritos", label: "Favoritos" }, { href: "/contato", label: "Contato" }];
+  const all = [{ href: "/produtos", label: "Todos os produtos" }, ...categories.map((c) => ({ href: `/categoria/${c.slug}`, label: c.name })), { href: "/favoritos", label: "Favoritos" }, { href: "/meus-pedidos", label: "Meus pedidos" }, { href: "/contato", label: "Contato" }];
   const icon = "relative grid size-11 place-items-center rounded-full transition hover:bg-white/10";
 
   return (

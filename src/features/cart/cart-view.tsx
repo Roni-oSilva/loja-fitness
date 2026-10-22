@@ -8,6 +8,7 @@ import { checkoutAction, quoteCartAction } from "./actions";
 import type { Quote, QuoteLine } from "@/lib/services/orders";
 import { SafeImage } from "@/components/safe-image";
 import { EmptyState } from "@/components/empty-state";
+import { BackButton } from "@/components/back-button";
 import { formatBRL } from "@/lib/money";
 
 const PROBLEM: Record<NonNullable<QuoteLine["problem"]>, string> = {
@@ -76,6 +77,7 @@ export function CartView({ whatsappReady, freeShippingHint }: { whatsappReady: b
 
   return (
     <div className="container-x py-8 sm:py-12">
+      <div className="mb-4"><BackButton fallback="/produtos" label="Continuar comprando" /></div>
       <div className="flex items-end justify-between gap-4"><h1 className="h-section">Carrinho</h1>
         {confirmClear ? <span className="flex items-center gap-2 text-sm">Esvaziar?<button type="button" className="btn btn-dark btn-sm" onClick={() => { cartActions.clear(); setConfirmClear(false); }}>Sim</button><button type="button" className="btn btn-outline btn-sm" onClick={() => setConfirmClear(false)}>Não</button></span>
           : <button type="button" className="text-sm font-semibold underline" onClick={() => setConfirmClear(true)}>Esvaziar carrinho</button>}</div>

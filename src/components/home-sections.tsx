@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Heart, MessageCircle, ShieldCheck, Sparkles, Star } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Dumbbell, Footprints, GlassWater, Hand, Heart, MessageCircle, PackageCheck, ReceiptText, ShieldCheck, ShoppingBag, Sparkles, Star, Wind, Zap, Shirt } from "lucide-react";
 import { SafeImage } from "./safe-image";
 import { BrandMark } from "./brand-mark";
 import { Pointer, TiltCard } from "./animated";
@@ -8,7 +8,9 @@ import type { Category, StoreSettings } from "@/lib/types";
 
 const delay = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
-export function Hero({ s }: { s: StoreSettings }) {
+export interface HeroVisual { url: string; name: string; price: string }
+
+export function Hero({ s, visuals = [] }: { s: StoreSettings; visuals?: HeroVisual[] }) {
   const desktop = s.hero_image_url, mobile = s.hero_image_mobile_url ?? desktop;
   return (
     <section className="px-2 pt-3 sm:px-4" aria-labelledby="hero-title">
@@ -35,13 +37,21 @@ export function Hero({ s }: { s: StoreSettings }) {
               <Link href={s.hero_secondary_link} className="btn !min-h-14 border-2 border-white/40 !px-9 text-white hover:bg-white hover:text-ink">{s.hero_secondary_label}</Link>
             </div>
           </div>
-          {/* cartão de marca flutuante */}
-          <div aria-hidden className="rise relative hidden justify-self-center lg:block" style={delay(2)}>
-            <TiltCard className="float relative grid size-72 place-items-center rounded-[3rem] bg-white/5 ring-1 ring-white/15 backdrop-blur">
-              <BrandMark className="size-44" spin />
-              <span className="absolute -left-6 top-10 rounded-full bg-brand px-4 py-2 font-display text-sm font-bold text-ink shadow-lg">Treino ✦ Rotina</span>
-              <span className="float-slow absolute -right-6 bottom-12 rounded-full bg-white px-4 py-2 font-display text-sm font-bold text-ink shadow-lg">Compra pelo WhatsApp</span>
-            </TiltCard>
+          {/* colagem de produtos flutuantes (ou cartão de marca, se ainda não há fotos) */}
+          <div aria-hidden className="rise relative hidden h-[26rem] justify-self-center lg:block lg:w-full" style={delay(2)}>
+            {visuals.length ? visuals.slice(0, 3).map((v, i) => (
+              <TiltCard key={i} className={`absolute w-44 xl:w-52 ${["left-2 top-0 -rotate-6", "right-0 top-16 rotate-6", "left-24 bottom-0 -rotate-2"][i]}`}>
+                <div className={i % 2 ? "float" : "float-slow"}>
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-white shadow-2xl ring-4 ring-white/90"><SafeImage src={v.url} alt="" sizes="220px" className="object-cover" /></div>
+                  <span className="absolute -bottom-3 left-3 rounded-full bg-brand px-3 py-1.5 font-display text-sm font-bold text-ink shadow-lg">{v.price}</span>
+                </div>
+              </TiltCard>
+            )) : (
+              <TiltCard className="float relative mx-auto grid size-72 place-items-center rounded-[3rem] bg-white/5 ring-1 ring-white/15 backdrop-blur">
+                <BrandMark className="size-44" spin />
+              </TiltCard>)}
+            <span className="float-slow absolute right-10 top-0 rounded-full bg-white px-4 py-2 font-display text-sm font-bold text-ink shadow-lg">Compra pelo WhatsApp</span>
+            <BrandMark className="float absolute -right-2 bottom-4 size-20" spin />
           </div>
         </div>
       </Pointer>
@@ -58,25 +68,54 @@ export function SectionTitle({ eyebrow, title, href, linkLabel }: { eyebrow?: st
   );
 }
 
+const CAT_ICON: Record<string, typeof Zap> = { "roupas-masculinas": Shirt, "roupas-femininas": Sparkles, "camisetas-e-regatas": Shirt, "leggings-e-shorts": Wind, "tenis-esportivos": Footprints, "luvas-e-munhequeiras": Hand, "garrafas-e-acessorios": GlassWater, "equipamentos-de-treino": Dumbbell };
+const CAT_TONE = ["bg-ink text-white", "bg-brand text-ink", "bg-graphite text-white", "bg-accent text-ink"];
+
 export function CategoryGrid({ categories }: { categories: (Category & { count: number })[] }) {
   if (!categories.length) return null;
   return (
-    <section className="container-x mt-16 sm:mt-24" aria-labelledby="cats">
+    <section className="container-x relative mt-16 sm:mt-24" aria-labelledby="cats">
+      <div aria-hidden className="float-slow pointer-events-none absolute -left-24 top-10 -z-10 size-72 rounded-full bg-brand/20 blur-3xl" />
       <div id="cats"><SectionTitle eyebrow="Navegue" title="Escolha seu treino" href="/produtos" linkLabel="Ver todos os produtos" /></div>
       <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
-        {categories.map((c, i) => (
-          <li key={c.id} className="reveal" style={delay(i % 4)}>
-            <Link href={`/categoria/${c.slug}`} className="on-dark lift group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-[2rem] bg-ink p-5 text-white sm:aspect-square">
-              {c.image_url ? <SafeImage src={c.image_url} alt="" sizes="(min-width:1024px) 25vw, 50vw" className="object-cover opacity-80 transition duration-700 group-hover:scale-110 motion-reduce:transition-none" />
-                : <BrandMark className="absolute -right-6 -top-6 size-36 opacity-30 transition duration-700 group-hover:rotate-90" />}
-              <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent" />
-              <span className="absolute right-4 top-4 grid size-10 place-items-center rounded-full bg-brand text-ink transition duration-300 group-hover:rotate-45"><ArrowUpRight className="size-5" aria-hidden /></span>
-              <span className="relative font-display text-2xl font-extrabold leading-tight sm:text-3xl">{c.name}</span>
-              <span className="relative mt-1 text-xs text-white/75">{c.count} {c.count === 1 ? "produto" : "produtos"}</span>
-            </Link>
-          </li>
-        ))}
+        {categories.map((c, i) => {
+          const Icon = CAT_ICON[c.slug] ?? Zap;
+          return (
+            <li key={c.id} className="reveal" style={delay(i % 4)}>
+              <Link href={`/categoria/${c.slug}`} className={`on-dark lift group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-[2rem] p-5 sm:aspect-square ${CAT_TONE[i % CAT_TONE.length]}`}>
+                {c.image_url && <SafeImage src={c.image_url} alt="" sizes="(min-width:1024px) 25vw, 50vw" className="object-cover opacity-80 transition duration-700 group-hover:scale-110 motion-reduce:transition-none" />}
+                {!c.image_url && <Icon aria-hidden className="absolute -right-4 -top-4 size-40 rotate-12 opacity-20 transition duration-700 group-hover:-rotate-6 group-hover:scale-110" strokeWidth={1.25} />}
+                {c.image_url && <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent" />}
+                <span className="relative mb-auto grid size-12 place-items-center rounded-2xl bg-white/15 backdrop-blur transition group-hover:rotate-6 group-hover:scale-110"><Icon className="size-6" aria-hidden /></span>
+                <span className="absolute right-4 top-4 grid size-10 place-items-center rounded-full bg-white text-ink transition duration-300 group-hover:rotate-45"><ArrowUpRight className="size-5" aria-hidden /></span>
+                <span className="relative font-display text-2xl font-extrabold leading-tight sm:text-3xl">{c.name}</span>
+                <span className="relative mt-1 text-xs opacity-80">{c.count} {c.count === 1 ? "produto" : "produtos"}</span>
+              </Link>
+            </li>);
+        })}
       </ul>
+    </section>
+  );
+}
+
+const STEPS = [
+  { Icon: ShoppingBag, title: "Escolha", text: "Navegue, escolha tamanho e cor e monte o seu carrinho." },
+  { Icon: MessageCircle, title: "Finalize no WhatsApp", text: "Registramos o pedido e abrimos a conversa com tudo preenchido." },
+  { Icon: ReceiptText, title: "Receba o recibo", text: "Você guarda o recibo do pedido e combina frete e pagamento." },
+  { Icon: PackageCheck, title: "Combine a entrega", text: "Confirmamos disponibilidade e acertamos os detalhes com você." },
+];
+export function HowItWorks() {
+  return (
+    <section className="container-x relative mt-16 sm:mt-24" aria-labelledby="como">
+      <div id="como"><SectionTitle eyebrow="Passo a passo" title="Como comprar" /></div>
+      <ol className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <span aria-hidden className="absolute left-[12%] right-[12%] top-12 hidden border-t-2 border-dashed border-ink/20 lg:block" />
+        {STEPS.map(({ Icon, title, text }, i) => (
+          <li key={title} className="reveal lift relative rounded-[2rem] bg-white p-6 ring-1 ring-neutral-200" style={delay(i)}>
+            <span className="relative grid size-16 place-items-center rounded-3xl bg-ink text-brand"><Icon className="size-8" aria-hidden /><span className="absolute -right-2 -top-2 grid size-7 place-items-center rounded-full bg-brand font-display text-sm font-extrabold text-ink">{i + 1}</span></span>
+            <h3 className="mt-5 font-display text-xl font-bold">{title}</h3><p className="mt-1 text-sm text-neutral-700">{text}</p>
+          </li>))}
+      </ol>
     </section>
   );
 }

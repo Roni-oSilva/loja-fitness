@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MessageCircle, ReceiptText, ShieldCheck } from "lucide-react";
 import { Gallery } from "@/features/products/gallery";
 import { ProductPurchase } from "@/features/products/product-purchase";
+import { BackButton } from "@/components/back-button";
 import { ProductGrid } from "@/components/product-card";
 import { toCard } from "@/lib/catalog-filter";
 import { getProductBySlug, getPublishedProducts, getStoreSettings } from "@/lib/services/catalog";
@@ -45,6 +47,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <div className="container-x py-8 sm:py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <div className="mb-4"><BackButton fallback={p.categories ? `/categoria/${p.categories.slug}` : "/produtos"} /></div>
       <nav aria-label="Você está em" className="mb-4 text-sm text-neutral-600">
         <Link href="/" className="hover:underline">Início</Link> / {p.categories ? <><Link href={`/categoria/${p.categories.slug}`} className="hover:underline">{p.categories.name}</Link> / </> : null}<span aria-current="page">{p.name}</span>
       </nav>
@@ -62,6 +65,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           {p.description && <section className="mt-8 border-t border-neutral-200 pt-6"><h2 className="font-display text-2xl font-bold uppercase">Descrição</h2><p className="mt-2 whitespace-pre-line text-neutral-800">{p.description}</p></section>}
           {p.size_guide && <details className="mt-4 border-t border-neutral-200 pt-4"><summary className="cursor-pointer font-display text-2xl font-bold uppercase">Tabela de medidas</summary><p className="mt-2 whitespace-pre-line text-neutral-800">{p.size_guide}</p></details>}
           {p.care_instructions && <details className="mt-4 border-t border-neutral-200 pt-4"><summary className="cursor-pointer font-display text-2xl font-bold uppercase">Conservação</summary><p className="mt-2 whitespace-pre-line text-neutral-800">{p.care_instructions}</p></details>}
+          <ul className="mt-6 grid gap-2 sm:grid-cols-3">
+            {[[MessageCircle, "Atendimento pelo WhatsApp"], [ShieldCheck, "Valores conferidos no pedido"], [ReceiptText, "Recibo do seu pedido"]].map(([Icon, t], i) => { const I = Icon as typeof ShieldCheck; return <li key={i} className="flex items-center gap-2 rounded-2xl bg-mist px-3 py-2.5 text-xs font-semibold"><I className="size-5 shrink-0 text-brand-strong" aria-hidden />{t as string}</li>; })}
+          </ul>
           <p className="mt-6 text-sm text-neutral-600">A compra é finalizada pelo WhatsApp, onde confirmamos disponibilidade, frete e pagamento. <Link href="/trocas-e-devolucoes" className="underline">Trocas e devoluções</Link>.</p>
         </div>
       </div>
