@@ -46,7 +46,7 @@ export function CartView({ whatsappReady, freeShippingHint }: { whatsappReady: b
     cartActions.sync(res.quote.lines.filter((q) => !q.problem || q.problem === "insufficient_stock").map((q) => ({ variantId: q.variantId, unitPriceCents: q.unitPriceCents, name: q.name, imageUrl: q.imageUrl, quantity: q.quantity })));
   }, [lines]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   useEffect(() => { if (hydrated) void refresh(couponApplied); }, [hydrated, key, couponApplied]);
   useEffect(() => { if (!idem.current) idem.current = crypto.randomUUID() + crypto.randomUUID().slice(0, 8); }, []);
 

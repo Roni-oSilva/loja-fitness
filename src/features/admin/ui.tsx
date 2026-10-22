@@ -61,7 +61,7 @@ export function ConfirmButton({ action, label, message, hidden, danger = true }:
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
   const dlg = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (open) dlg.current?.showModal(); else dlg.current?.close(); }, [open]);
-  useEffect(() => { if (state?.ok) setOpen(false); }, [state]);
+  useEffect(() => { if (state?.ok) dlg.current?.close(); }, [state]);
   return (
     <>
       <button type="button" onClick={() => setOpen(true)} className={cn("btn btn-sm", danger ? "border-2 border-red-700 text-red-700 hover:bg-red-700 hover:text-white" : "btn-outline")}>{label}</button>

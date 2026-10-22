@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { emptyToNull, hexColor, httpsUrl, linkSchema, optionalText, slugSchema, uuid } from "./common";
+import { emptyToNull, hexColor, imageUrl, httpsUrl, linkSchema, optionalText, slugSchema, uuid } from "./common";
 import { parseBRLToCents } from "../money";
 
 const money = z.string().trim().transform((v, ctx) => {
@@ -8,7 +8,15 @@ const money = z.string().trim().transform((v, ctx) => {
   return c;
 });
 const optionalMoney = z.preprocess((v) => (v === "" || v == null ? null : v), money.nullable());
-const optionalDate = z.preprocess((v) => (v === "" || v == null ? null : v), z.string().refine((s) => !Number.isNaN(Date.parse(s)), "Data inválida").transform((s) => new Date(s).toISOString()).nullable());
+/** Datas de formulário (sem fuso) são interpretadas no horário de Brasília. */
+const withBrt = (v: unknown) => {
+  if (v === "" || v == null) return null;
+  if (typeof v !== "string") return v;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return `${v}T00:00:00-03:00`;
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) return `${v}:00-03:00`;
+  return v;
+};
+const optionalDate = z.preprocess(withBrt, z.string().refine((s) => !Number.isNaN(Date.parse(s)), "Data inválida").transform((s) => new Date(s).toISOString()).nullable());
 const checkbox = z.preprocess((v) => v === "on" || v === "true" || v === true, z.boolean());
 const intField = (min: number, max: number) => z.coerce.number().int().min(min).max(max);
 
@@ -16,7 +24,7 @@ export const categorySchema = z.object({
   name: z.string().trim().min(2).max(80),
   slug: slugSchema,
   description: optionalText(500),
-  image_url: emptyToNull(z.string().trim().max(1000)),
+  image_url: emptyToNull(imageUrl),
   sort_order: intField(0, 9999).default(0),
   is_active: checkbox,
 });
@@ -93,8 +101,8 @@ export const couponSchema = z.object({
 export const bannerSchema = z.object({
   title: z.string().trim().min(2).max(120),
   subtitle: optionalText(300),
-  image_desktop: emptyToNull(z.string().trim().max(1000)),
-  image_mobile: emptyToNull(z.string().trim().max(1000)),
+  image_desktop: emptyToNull(imageUrl),
+  image_mobile: emptyToNull(imageUrl),
   button_label: optionalText(40),
   target_url: emptyToNull(linkSchema),
   starts_at: optionalDate,
@@ -109,7 +117,7 @@ export const bannerSchema = z.object({
 export const benefitSchema = z.object({ title: z.string().trim().min(2).max(60), description: z.string().trim().max(200) });
 export const editorialSchema = z.object({
   title: z.string().trim().min(2).max(80), text: z.string().trim().max(300),
-  image_url: emptyToNull(z.string().trim().max(1000)), link: emptyToNull(linkSchema),
+  image_url: emptyToNull(imageUrl), link: emptyToNull(linkSchema),
 });
 
 const whatsapp = z.preprocess((v) => (typeof v === "string" ? v.replace(/\D/g, "") : v), z.string().regex(/^[1-9]\d{9,14}$/, "Use o formato internacional com DDI e DDD (ex.: 5511999998888)").or(z.literal("")))
@@ -118,8 +126,8 @@ const whatsapp = z.preprocess((v) => (typeof v === "string" ? v.replace(/\D/g, "
 export const settingsSchema = z.object({
   store_name: z.string().trim().min(2).max(60),
   tagline: optionalText(160),
-  logo_url: emptyToNull(z.string().trim().max(1000)),
-  favicon_url: emptyToNull(z.string().trim().max(1000)),
+  logo_url: emptyToNull(imageUrl),
+  favicon_url: emptyToNull(imageUrl),
   theme_primary: hexColor, theme_accent: hexColor, theme_dark: hexColor,
   whatsapp_number: whatsapp,
   contact_email: emptyToNull(z.string().trim().email().max(254)),
@@ -136,8 +144,8 @@ export const settingsSchema = z.object({
   hero_subtitle: z.string().trim().min(2).max(300),
   hero_cta_label: z.string().trim().min(2).max(40), hero_cta_link: linkSchema,
   hero_secondary_label: z.string().trim().min(2).max(40), hero_secondary_link: linkSchema,
-  hero_image_url: emptyToNull(z.string().trim().max(1000)),
-  hero_image_mobile_url: emptyToNull(z.string().trim().max(1000)),
+  hero_image_url: emptyToNull(imageUrl),
+  hero_image_mobile_url: emptyToNull(imageUrl),
   featured_title: z.string().trim().min(2).max(60),
   low_stock_threshold: intField(0, 10000),
   seo_title: optionalText(70), seo_description: optionalText(160),

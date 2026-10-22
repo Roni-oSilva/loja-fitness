@@ -31,7 +31,7 @@ export function SiteHeader({ storeName, logoUrl, categories, whatsappLink }: Pro
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
       <a href="#conteudo" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:p-3">Ir para o conteúdo</a>
-      <div className="container-x grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-2 sm:h-20">
+      <div className="container-x grid h-16 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:h-20">
         <div className="flex items-center gap-5">
           <button type="button" className={`${icon} lg:hidden`} aria-label="Abrir menu" aria-expanded={open} aria-controls="menu-mobile" onClick={() => setOpen(true)}><Menu className="size-6" aria-hidden /></button>
           <nav aria-label="Principal" className="hidden items-center gap-6 lg:flex">
@@ -39,12 +39,12 @@ export function SiteHeader({ storeName, logoUrl, categories, whatsappLink }: Pro
           </nav>
         </div>
 
-        <Link href="/" className="flex justify-center font-display text-3xl font-extrabold uppercase tracking-wide sm:text-4xl" aria-label={`${storeName} — página inicial`}>
+        <Link href="/" className="flex max-w-[50vw] justify-center font-display text-2xl font-extrabold uppercase tracking-wide sm:max-w-none sm:text-4xl" aria-label={`${storeName} — página inicial`}>
           {logoUrl ? <span className="relative block h-9 w-36 sm:h-11 sm:w-44"><SafeImage src={logoUrl} alt={storeName} sizes="176px" className="object-contain" priority /></span> : <span className="truncate">{storeName}</span>}
         </Link>
 
         <div className="flex items-center justify-end">
-          <Link href="/busca" className={icon} aria-label="Buscar produtos"><Search className="size-6" aria-hidden /></Link>
+          <Link href="/busca" className={`${icon} hidden sm:grid`} aria-label="Buscar produtos"><Search className="size-6" aria-hidden /></Link>
           <Link href="/favoritos" className={`${icon} hidden sm:grid`} aria-label={`Favoritos${hydrated && favs.length ? ` (${favs.length})` : ""}`}><Heart className="size-6" aria-hidden /></Link>
           <Link href="/carrinho" className={icon} aria-label={`Carrinho${hydrated ? `, ${count} ${count === 1 ? "item" : "itens"}` : ""}`}>
             <ShoppingBag className="size-6" aria-hidden />
@@ -59,6 +59,7 @@ export function SiteHeader({ storeName, logoUrl, categories, whatsappLink }: Pro
           <div className="absolute inset-0 bg-ink/60" onClick={() => setOpen(false)} />
           <div ref={panel} id="menu-mobile" className="on-dark absolute inset-y-0 left-0 flex w-[85%] max-w-sm flex-col bg-ink p-5 text-white">
             <button type="button" className="mb-4 ml-auto grid size-11 place-items-center" aria-label="Fechar menu" onClick={() => setOpen(false)}><X className="size-6" aria-hidden /></button>
+            <form action="/busca" role="search" className="mb-4 flex gap-2"><label htmlFor="q-menu" className="sr-only">Buscar produtos</label><input id="q-menu" name="q" type="search" maxLength={80} placeholder="Buscar produtos" className="field !border-white/30 !bg-white/10 !text-white placeholder:!text-white/70" /><button type="submit" className="grid size-12 shrink-0 place-items-center rounded-md bg-white/10" aria-label="Buscar"><Search className="size-5" aria-hidden /></button></form>
             <nav aria-label="Menu mobile" className="flex flex-col overflow-y-auto">
               {all.map((n) => <Link key={n.href} href={n.href} onClick={() => setOpen(false)} className="border-b border-white/10 py-4 font-display text-2xl font-bold uppercase">{n.label}</Link>)}
             </nav>

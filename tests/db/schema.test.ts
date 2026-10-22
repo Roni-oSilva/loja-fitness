@@ -226,3 +226,18 @@ describe("admin_save_product", () => {
     await expect(save(NOBODY, payload({ slug: "x-nobody" }))).rejects.toThrow(/FORBIDDEN/);
   });
 });
+
+describe("seed de demonstração", () => {
+  it("executa em banco limpo, é idempotente e respeita as travas de estoque", async () => {
+    const seed = (await import("node:fs")).readFileSync(new URL("../../supabase/seed.sql", import.meta.url), "utf8");
+    const fresh = await createDb();
+    await fresh.exec(seed); await fresh.exec(seed);
+    const prods = (await fresh.query<any>("select count(*)::int c, bool_and(is_demo) d from public.products")).rows[0];
+    expect(prods).toEqual({ c: 8, d: true });
+    const bad = (await fresh.query<any>(`select count(*)::int c from public.product_variants v
+      where v.stock_quantity <> coalesce((select sum(quantity_delta) from public.inventory_movements m where m.variant_id = v.id), 0)`)).rows[0];
+    expect(bad.c).toBe(0); // estoque sempre = soma das movimentações
+    expect((await fresh.query<any>("select count(*)::int c from public.banners")).rows[0].c).toBe(1);
+    expect((await fresh.query<any>("select whatsapp_number from public.store_settings")).rows[0].whatsapp_number).toBeNull();
+  });
+});

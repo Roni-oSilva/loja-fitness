@@ -13,7 +13,7 @@ export function FavoritesView() {
   const key = ids.join(",");
   useEffect(() => {
     let live = true;
-    if (!ids.length) { setItems([]); return; }
+    if (!ids.length) return;
     getProductsByIdsAction(ids).then((r) => { if (live) { setItems(r); setError(false); } }).catch(() => live && setError(true));
     return () => { live = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,6 +22,7 @@ export function FavoritesView() {
     <div className="container-x py-10 sm:py-14">
       <h1 className="h-section mb-8">Favoritos</h1>
       {error ? <p role="alert" className="rounded-md bg-red-50 p-3 font-semibold text-red-800">Não foi possível carregar seus favoritos. Tente novamente.</p>
+        : ids.length === 0 ? <EmptyState title="Nenhum favorito ainda" text="Toque no coração de um produto para salvá-lo aqui. Seus favoritos ficam neste aparelho." href="/produtos" cta="Ver produtos" />
         : items === null ? <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" role="status" aria-label="Carregando">{Array.from({ length: 4 }, (_, i) => <div key={i} className="skeleton aspect-[4/5]" />)}</div>
         : items.length ? <ProductGrid items={items} />
         : <EmptyState title="Nenhum favorito ainda" text="Toque no coração de um produto para salvá-lo aqui. Seus favoritos ficam neste aparelho." href="/produtos" cta="Ver produtos" />}

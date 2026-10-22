@@ -114,8 +114,14 @@ export interface OrderView {
 /** Acesso ao pedido exige o token aleatório (comparação em tempo constante). Qualquer falha devolve null (sem distinguir causas). */
 export async function getOrderForAccess(id: string, token: string | undefined): Promise<OrderView | null> {
   if (!token || !/^[0-9a-f-]{36}$/i.test(id) || token.length < 20 || token.length > 100) return null;
-  const admin = createAdminClient();
-  const { data: o } = await admin.from("orders").select("*, customers(name), order_items(*)").eq("id", id).maybeSingle();
+  let o;
+  try {
+    const { data } = await createAdminClient().from("orders").select("*, customers(name), order_items(*)").eq("id", id).maybeSingle();
+    o = data;
+  } catch (e) {
+    console.error("[orders] acesso", (e as Error).message.slice(0, 80));
+    return null; // sem backend/erro: tratado como "não encontrado", sem detalhes
+  }
   if (!o) return null;
   const a = Buffer.from(hashToken(token)), b = Buffer.from(o.access_token_hash as string);
   if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
